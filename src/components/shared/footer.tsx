@@ -5,7 +5,7 @@ import {
   InstagramIcon,
   LinkedinIcon,
   TwitterIcon,
-  YoutubeIcon,
+  FacebookIcon,
 } from "@/components/ui/icons"
 import { Tooltip } from "@/components/shared/tooltip"
 import type { FooterMenuItem } from "@/components/shared/navigation-types"
@@ -32,11 +32,23 @@ const COLUMNS: { title: string; links: { label: string; href: string; disabled?:
 ]
 
 const SOCIALS = [
-  { label: "Twitter", href: "https://twitter.com", Icon: TwitterIcon },
-  { label: "LinkedIn", href: "https://linkedin.com", Icon: LinkedinIcon },
-  { label: "Instagram", href: "https://instagram.com", Icon: InstagramIcon },
-  { label: "YouTube", href: "https://youtube.com", Icon: YoutubeIcon },
-]
+  { label: "Twitter", href: "https://x.com/Imara_Africa", Icon: TwitterIcon },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/imara-fellowship-0389402b6/",
+    Icon: LinkedinIcon,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/imarafellowship",
+    Icon: InstagramIcon,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/imaraAfr",
+    Icon: FacebookIcon,
+  },
+];
 
 export function Footer({ programs = [], orgs = [], quicks = [] }: FooterProps) {
   const privacyLink = quicks.find((item) => /privacy/i.test(item.node.label))
@@ -133,7 +145,7 @@ export function Footer({ programs = [], orgs = [], quicks = [] }: FooterProps) {
 
       <div className="border-t border-white/10">
         <div className="container-page flex flex-col items-center justify-between gap-4 py-6 text-caption text-blue-300 sm:flex-row">
-          <p>Copyright © 2026 Imara Fellowship | All Rights Reserved</p>
+          <p>Copyright &copy; 2026 Imara Fellowship | All Rights Reserved</p>
           <div className="flex gap-6">
             <Link
               href={termsLink?.node.uri ?? "/terms"}

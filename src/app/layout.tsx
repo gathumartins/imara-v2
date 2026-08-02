@@ -110,9 +110,6 @@ export default async function RootLayout({
     const orgMenu = data.data.orgMenu.menuItems.edges;
     const quickMenu = data.data.quickMenu.menuItems.edges;
     const lay = data.data.layout.headerFooter;
-    console.log("programs", programsMenu);
-    console.log("orgs", orgMenu);
-    console.log("quicks", quickMenu);
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <body

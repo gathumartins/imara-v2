@@ -38,7 +38,7 @@ export function HeroSection() {
           <h1 className="text-h1 text-white md:text-display">
             Building a
             <br />
-            <span className="text-gold-600">Community</span> of Young
+            <span className="text-gold-700">Community</span> of Young
             <br />
             Africa Policy Leaders
           </h1>
@@ -51,17 +51,17 @@ export function HeroSection() {
 
         <div className="flex flex-col items-center gap-4 sm:flex-row">
           <Button asChild variant="white" size="xl">
-            <a href="#" target="_blank" rel="noopener noreferrer">
+            <a href="/contacts">
               Get In Touch
               <ChevronRight className="size-4" />
             </a>
           </Button>
           <Button asChild variant="glass" size="xl">
-            <Link href="/about">
+            <Link href="#">
               <span className="flex size-7 items-center justify-center rounded-full bg-white/20">
                 <Play className="size-3.5 fill-current" />
               </span>
-              Watch Our Story
+              Apply Now
             </Link>
           </Button>
         </div>
