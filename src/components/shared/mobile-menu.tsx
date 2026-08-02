@@ -6,10 +6,12 @@ import { Menu, X } from "lucide-react"
 import { usePathname } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
+import type { LayoutData, NavLink } from "@/components/shared/navigation-types"
 import { cn } from "@/lib/utils"
 
 interface MobileMenuProps {
-  links: { label: string; href: string }[]
+  links: NavLink[]
+  layoutData?: LayoutData
 }
 
 /**
@@ -19,8 +21,12 @@ interface MobileMenuProps {
  * the menu auto-close when a link is followed. Body-scroll lock is a plain
  * `body:has(#mobile-menu-toggle:checked)` rule in globals.css.
  */
-export function MobileMenu({ links }: MobileMenuProps) {
+export function MobileMenu({ links, layoutData }: MobileMenuProps) {
   const pathname = usePathname()
+  const applyLink = layoutData?.register?.buttonLink
+  const applyHref = applyLink?.url ?? "#"
+  const applyLabel = applyLink?.title ?? "Apply Now"
+  const applyTarget = applyLink?.target === "_blank" ? "_blank" : undefined
 
   return (
     <div key={pathname}>
@@ -79,14 +85,10 @@ export function MobileMenu({ links }: MobileMenuProps) {
         </nav>
 
         <div className="mt-auto flex flex-col gap-4 border-t border-white/15 pt-6">
-          <Link
-            href="/sign-in"
-            className="text-center text-ui-medium text-blue-100 transition-colors hover:text-white"
-          >
-            Sign In
-          </Link>
           <Button asChild variant="gold" size="md" className="w-full">
-            <a href="#" target="_blank" rel="noopener noreferrer">Apply Now</a>
+            <a href={applyHref} target={applyTarget} rel={applyTarget ? "noopener noreferrer" : undefined}>
+              {applyLabel}
+            </a>
           </Button>
         </div>
       </div>

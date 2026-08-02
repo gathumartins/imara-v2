@@ -4,11 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
-
-export interface NavLink {
-  label: string
-  href: string
-}
+import type { NavLink } from "@/components/shared/navigation-types"
 
 export function NavLinks({
   links,
