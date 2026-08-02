@@ -6,6 +6,14 @@ export interface MainMenuItem {
   }
 }
 
+export interface FooterMenuItem {
+  node: {
+    id: string
+    label: string
+    uri: string
+  }
+}
+
 export interface NavLink {
   label: string
   href: string

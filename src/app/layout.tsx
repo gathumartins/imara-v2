@@ -110,12 +110,18 @@ export default async function RootLayout({
     const orgMenu = data.data.orgMenu.menuItems.edges;
     const quickMenu = data.data.quickMenu.menuItems.edges;
     const lay = data.data.layout.headerFooter;
+    console.log("programs", programsMenu);
+    console.log("orgs", orgMenu);
+    console.log("quicks", quickMenu);
   return (
     <html lang="en" className="h-full antialiased" suppressHydrationWarning>
-      <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
+      <body
+        className="min-h-full flex flex-col font-sans"
+        suppressHydrationWarning
+      >
         <Navbar mainMenu={mainMenu} layoutData={lay} />
         <main className="flex-1">{children}</main>
-        <Footer />
+        <Footer programs={programsMenu} orgs={orgMenu} quicks={quickMenu} />
       </body>
     </html>
   );
