@@ -1,0 +1,540 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ------------------------------------------------------------------ */
+/* Self-hosted fonts, declared explicitly (not next/font) so the real   */
+/* family names — "Playfair Display", "Quicksand", etc — are what      */
+/* actually show up in computed styles / devtools, not an internal     */
+/* generated name. Files live in public/fonts/, no network fetch.      */
+/* ------------------------------------------------------------------ */
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/fonts/playfair-display-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/fonts/playfair-display-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/fonts/playfair-display-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/fonts/playfair-display-800.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("/fonts/quicksand-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("/fonts/quicksand-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("/fonts/quicksand-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Quicksand";
+  src: url("/fonts/quicksand-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/fonts/space-grotesk-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("/fonts/figtree-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("/fonts/figtree-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Figtree";
+  src: url("/fonts/figtree-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------------ */
+/* Theme tokens -> Tailwind utilities                                  */
+/* ------------------------------------------------------------------ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-quicksand);
+  --font-mono: var(--font-space-grotesk);
+  --font-display: var(--font-playfair);
+  --font-heading: var(--font-space-grotesk);
+  --font-body: var(--font-quicksand);
+  --font-ui: var(--font-space-grotesk);
+  --font-tag: var(--font-figtree);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Imara brand palette exposed as Tailwind utilities:
+     bg-navy-900, text-blue-700, border-gold-500, bg-alert, text-success ... */
+  --color-navy-900: var(--imara-navy-900);
+  --color-navy-800: var(--imara-navy-800);
+  --color-blue-700: var(--imara-blue-700);
+  --color-blue-500: var(--imara-blue-500);
+  --color-blue-300: var(--imara-blue-300);
+  --color-blue-100: var(--imara-blue-100);
+
+  --color-gold-700: var(--imara-gold-700);
+  --color-gold-600: var(--imara-gold-600);
+  --color-gold-500: var(--imara-gold-500);
+  --color-gold-100: var(--imara-gold-100);
+
+  --color-gray-700: var(--imara-gray-700);
+  --color-gray-600: var(--imara-gray-600);
+  --color-gray-500: var(--imara-gray-500);
+  --color-gray-400: var(--imara-gray-400);
+  --color-gray-300: var(--imara-gray-300);
+  --color-gray-200: var(--imara-gray-200);
+  --color-gray-100: var(--imara-gray-100);
+
+  --color-alert: var(--imara-alert);
+  --color-success: var(--imara-success);
+
+  /* Tone variants for the report-cover blocks, each derived purely from
+     palette colors via color-mix (no new hex introduced). */
+  --color-tone-forest: var(--imara-tone-forest);
+  --color-tone-rust: var(--imara-tone-rust);
+  --color-tone-olive: var(--imara-tone-olive);
+}
+
+/* ------------------------------------------------------------------ */
+/* Raw color values (light theme)                                      */
+/* ------------------------------------------------------------------ */
+:root {
+  /* Font stacks, pointing at the explicit @font-face families declared above. */
+  --font-playfair: "Playfair Display", Georgia, serif;
+  --font-quicksand: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+  --font-space-grotesk: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-figtree: "Figtree", ui-sans-serif, system-ui, sans-serif;
+
+  /* Primary Blues */
+  --imara-navy-900: #0a1628;
+  --imara-navy-800: #0d1f3c;
+  --imara-blue-700: #1d4c94;
+  --imara-blue-500: #3372c4;
+  --imara-blue-300: #7996c1;
+  --imara-blue-100: #ebf0fb;
+
+  /* Gold Accent */
+  --imara-gold-700: #cc9a34;
+  --imara-gold-600: #b39b47;
+  --imara-gold-500: #9b8340;
+  --imara-gold-100: #f7f1dc;
+
+  /* Neutrals */
+  --imara-gray-700: #374151;
+  --imara-gray-600: #4b5563;
+  --imara-gray-500: #6b7280;
+  --imara-gray-400: #9ca3af;
+  --imara-gray-300: #d9d9d9;
+  --imara-gray-200: #e5e7eb;
+  --imara-gray-100: #f8f9fc;
+  --imara-white: #ffffff;
+
+  /* Semantic */
+  --imara-alert: #e8532a;
+  --imara-success: #2a7b6e;
+
+  /* Derived tones for the report-cover blocks (reports-listing-section) —
+     each mixed purely from two palette colors, so no new hex is introduced. */
+  --imara-tone-forest: color-mix(in oklch, var(--imara-success) 40%, var(--imara-navy-900));
+  --imara-tone-rust: color-mix(in oklch, var(--imara-alert) 40%, var(--imara-navy-900));
+  --imara-tone-olive: color-mix(in oklch, var(--imara-gold-600) 40%, var(--imara-navy-900));
+
+  /* Hero image overlay: navy-to-blue diagonal wash used over photography.
+     Snapped to the Blue 700 -> Blue 500 palette pair (was a bespoke,
+     off-palette navy/blue not in the documented swatches) and mixed
+     straight from those variables — no hand-typed rgb triples. */
+  --gradient-hero-overlay: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--imara-blue-700) 83%, transparent) 0%,
+    color-mix(in oklch, var(--imara-blue-500) 83%, transparent) 100%
+  );
+
+  /* Page hero background gradient (smooth navy wash, dark left to lighter right) */
+  --gradient-page-hero: linear-gradient(
+    105deg,
+    var(--imara-navy-900) 0%,
+    var(--imara-navy-900) 35%,
+    var(--imara-navy-800) 75%,
+    var(--imara-blue-700) 160%
+  );
+
+  /* CTA panel background, reused across every register/newsletter panel.
+     1. Base wash — Navy 800 -> Navy 900, the closest on-palette pair to the
+        original bespoke dark-navy gradient.
+     2. Soft glow — radial at top right, Gold 700 fading to transparent, so
+        it reads as a gentle highlight over the navy wash, not a separate
+        blended layer. */
+  --gradient-cta-linear: linear-gradient(
+    90deg,
+    var(--imara-navy-800) 0%,
+    var(--imara-navy-900) 100%
+  );
+  --gradient-cta-radial:
+    radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--imara-gold-700) 15%, transparent) 0%, transparent 40%),
+    radial-gradient(circle at 0% 100%, color-mix(in oklch, var(--imara-blue-700) 40%, transparent) 0%, transparent 50%);
+
+  /* shadcn semantic tokens, mapped onto the Imara palette */
+  --background: var(--imara-white);
+  --foreground: var(--imara-gray-700);
+  --card: var(--imara-white);
+  --card-foreground: var(--imara-gray-700);
+  --popover: var(--imara-white);
+  --popover-foreground: var(--imara-gray-700);
+  --primary: var(--imara-blue-700);
+  --primary-foreground: var(--imara-white);
+  --secondary: var(--imara-gold-600);
+  --secondary-foreground: var(--imara-navy-900);
+  --muted: var(--imara-gray-100);
+  --muted-foreground: var(--imara-gray-500);
+  --accent: var(--imara-gold-100);
+  --accent-foreground: var(--imara-navy-900);
+  --destructive: var(--imara-alert);
+  --destructive-foreground: var(--imara-white);
+  --border: var(--imara-gray-200);
+  --input: var(--imara-gray-200);
+  --ring: var(--imara-blue-500);
+  --chart-1: var(--imara-blue-700);
+  --chart-2: var(--imara-gold-600);
+  --chart-3: var(--imara-blue-300);
+  --chart-4: var(--imara-gray-400);
+  --chart-5: var(--imara-alert);
+  --radius: 1rem;
+  --sidebar: var(--imara-gray-100);
+  --sidebar-foreground: var(--imara-gray-700);
+  --sidebar-primary: var(--imara-blue-700);
+  --sidebar-primary-foreground: var(--imara-white);
+  --sidebar-accent: var(--imara-gold-100);
+  --sidebar-accent-foreground: var(--imara-navy-900);
+  --sidebar-border: var(--imara-gray-200);
+  --sidebar-ring: var(--imara-blue-500);
+}
+
+/* ------------------------------------------------------------------ */
+/* Dark theme overrides                                                 */
+/* ------------------------------------------------------------------ */
+.dark {
+  --background: var(--imara-navy-900);
+  --foreground: var(--imara-gray-100);
+  --card: var(--imara-navy-800);
+  --card-foreground: var(--imara-gray-100);
+  --popover: var(--imara-navy-800);
+  --popover-foreground: var(--imara-gray-100);
+  --primary: var(--imara-blue-500);
+  --primary-foreground: var(--imara-navy-900);
+  --secondary: var(--imara-gold-600);
+  --secondary-foreground: var(--imara-navy-900);
+  --muted: var(--imara-navy-800);
+  --muted-foreground: var(--imara-blue-300);
+  --accent: var(--imara-gold-500);
+  --accent-foreground: var(--imara-navy-900);
+  --destructive: var(--imara-alert);
+  --destructive-foreground: var(--imara-white);
+  --border: color-mix(in oklch, var(--imara-blue-300) 20%, transparent);
+  --input: color-mix(in oklch, var(--imara-blue-300) 20%, transparent);
+  --ring: var(--imara-blue-500);
+  --chart-1: var(--imara-blue-500);
+  --chart-2: var(--imara-gold-600);
+  --chart-3: var(--imara-blue-300);
+  --chart-4: var(--imara-gray-400);
+  --chart-5: var(--imara-alert);
+  --sidebar: var(--imara-navy-800);
+  --sidebar-foreground: var(--imara-gray-100);
+  --sidebar-primary: var(--imara-blue-500);
+  --sidebar-primary-foreground: var(--imara-navy-900);
+  --sidebar-accent: var(--imara-gold-500);
+  --sidebar-accent-foreground: var(--imara-navy-900);
+  --sidebar-border: color-mix(in oklch, var(--imara-blue-300) 20%, transparent);
+  --sidebar-ring: var(--imara-blue-500);
+}
+
+/* ------------------------------------------------------------------ */
+/* Typography scale — the complete, exclusive type system. Playfair    */
+/* Display, Quicksand, Space Grotesk, and Figtree (declared as         */
+/* @font-face above) are the only fonts used anywhere in the product;  */
+/* every one of these 11 utilities is the only sanctioned way to set   */
+/* a font-family + weight + size + line-height combination. Don't      */
+/* introduce a 12th, and don't reach for a raw Tailwind text-size or    */
+/* font-weight default, or an arbitrary text-[Npx] — snap to the       */
+/* closest row here instead                                            */
+/* instead: text-display, text-h1, text-h2, text-h3, text-body-l,      */
+/* text-body, text-body-s, text-caption, text-ui-bold, text-ui-medium, */
+/* text-tag.                                                           */
+/* ------------------------------------------------------------------ */
+@utility text-display {
+  font-family: var(--font-playfair);
+  font-weight: 800;
+  font-size: 84px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+@utility text-h1 {
+  font-family: var(--font-playfair);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+@utility text-h2 {
+  font-family: var(--font-playfair);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.15;
+}
+@utility text-h3 {
+  font-family: var(--font-playfair);
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 1.25;
+}
+@utility text-body-l {
+  font-family: var(--font-quicksand);
+  font-weight: 400;
+  font-size: 19px;
+  line-height: 1.6;
+}
+@utility text-body {
+  font-family: var(--font-quicksand);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+}
+@utility text-body-s {
+  font-family: var(--font-quicksand);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
+@utility text-caption {
+  font-family: var(--font-quicksand);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.4;
+}
+@utility text-ui-bold {
+  font-family: var(--font-space-grotesk);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+}
+@utility text-ui-medium {
+  font-family: var(--font-space-grotesk);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.3;
+}
+@utility text-tag {
+  font-family: var(--font-figtree);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ */
+/* Page container: the design screen is 1440px wide, but content sits  */
+/* in a 1280px column (confirmed from Figma's own inner "Container"    */
+/* nodes, e.g. the navbar's content frame is exactly 1280px). Capping   */
+/* max-width at 1280 and centering gives the correct 80px gutters at    */
+/* 1440 automatically, and scales gracefully past it.                  */
+/* ------------------------------------------------------------------ */
+@utility container-page {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (min-width: 640px) {
+    padding-inline: 2rem;
+  }
+  @media (min-width: 1024px) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Navy-to-blue diagonal overlay for photography (see --gradient-hero-overlay). */
+@utility bg-hero-overlay {
+  background-image: var(--gradient-hero-overlay);
+}
+
+@utility bg-page-hero {
+  background-image: var(--gradient-page-hero);
+}
+
+/* The two CTA panel treatments as standalone, reusable utilities... */
+@utility bg-cta-linear {
+  background-image: var(--gradient-cta-linear);
+}
+
+@utility bg-cta-radial {
+  background-image: var(--gradient-cta-radial);
+}
+
+/* ...and composed together, top-right glow over the base wash, for the
+   common case (register/newsletter CTA panels). */
+@utility bg-cta {
+  background-image: var(--gradient-cta-radial), var(--gradient-cta-linear);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1 {
+    @apply text-h1 text-navy-900 dark:text-white;
+  }
+  h2 {
+    @apply text-h2 text-navy-900 dark:text-white;
+  }
+  h3 {
+    @apply text-h3 text-blue-700 dark:text-blue-300;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Pure-CSS count-up number, no JS. Registering --num as an animatable  */
+/* <integer> lets a keyframe animate it from 0 to var(--to), and        */
+/* counter-reset/counter() renders the live value as text content.     */
+/* Usage: <span className="stat-counter" style={{ "--to": 100 }} />    */
+/* ------------------------------------------------------------------ */
+@property --num {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.stat-counter {
+  --num: 0;
+  counter-reset: num var(--num);
+  animation: stat-count-up 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-play-state: running;
+}
+.stat-counter::after {
+  content: counter(num);
+}
+
+@keyframes stat-count-up {
+  from {
+    --num: 0;
+  }
+  to {
+    --num: var(--to, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-counter {
+    animation-duration: 0.01ms;
+  }
+}
+
+/* Locks page scroll while the CSS-only mobile menu (mobile-menu.tsx) is
+   open — no JS needed, driven entirely by the checkbox's :checked state. */
+body:has(#mobile-menu-toggle:checked) {
+  overflow: hidden;
+}
