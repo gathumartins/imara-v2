@@ -35,17 +35,19 @@ export function HeroSection() {
     <HeroSlider slides={HERO_SLIDES} className="min-h-[1154px]">
       <div className="container-page flex min-h-[1154px] flex-col items-center justify-center gap-10 pt-12 pb-24 text-center">
         <div className="flex max-w-4xl flex-col items-center gap-6">
-          <h1 className="text-h1 text-white md:text-display">
-            Building a
-            <br />
-            <span className="text-gold-700">Community</span> of Young
-            <br />
-            Africa Policy Leaders
-          </h1>
+          <div className="[&_h1]:text-h1 [&_h1]:text-white [&_h1]:md:text-display [&_h1>span]:text-gold-700">
+            <h1>
+              Building a
+              <br />
+              <span>Community</span> of Young
+              <br />
+              Africa Policy Leaders
+            </h1>
+          </div>
           <p className="max-w-2xl text-body-l text-blue-100">
             A transformative fellowship empowering young Africans to drive
-            systemic change through evidence-based policy, bold leadership,
-            and continental solidarity.
+            systemic change through evidence-based policy, bold leadership, and
+            continental solidarity.
           </p>
         </div>
 
@@ -57,7 +59,7 @@ export function HeroSection() {
             </a>
           </Button>
           <Button asChild variant="glass" size="xl">
-            <Link href="#">
+            <Link href="#" target="_blank" rel="noopener noreferrer">
               <span className="flex size-7 items-center justify-center rounded-full bg-white/20">
                 <Play className="size-3.5 fill-current" />
               </span>
@@ -82,5 +84,5 @@ export function HeroSection() {
         </div>
       </div>
     </HeroSlider>
-  )
+  );
 }

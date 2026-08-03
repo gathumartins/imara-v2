@@ -68,7 +68,7 @@ export default async function RootLayout({
 
   layout: layout(id: "cG9zdDo5OQ==") {
     headerFooter {
-      logo {
+      newlogo {
         node {
           sourceUrl
         }
