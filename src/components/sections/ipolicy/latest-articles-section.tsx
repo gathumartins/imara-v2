@@ -73,6 +73,12 @@ export function LatestArticlesSection({ posts }: { posts: PostEdge[] }) {
         <h2 className="mb-10 text-navy-900">More from the fellowship</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => {
+            const date = new Date(post.node.date);
+            const formattedDate = new Intl.DateTimeFormat("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            }).format(date);
             return (
               <article
                 key={post.node.id}
@@ -91,7 +97,7 @@ export function LatestArticlesSection({ posts }: { posts: PostEdge[] }) {
                   }
                 />
                 <div className="flex flex-1 flex-col gap-3 p-6">
-                  <p className="text-caption text-gray-500">{post.node.date}</p>
+                  <p className="text-caption text-gray-500">{formattedDate}</p>
                   <h4 className="text-ui-bold text-navy-900">
                     {post.node.title}
                   </h4>

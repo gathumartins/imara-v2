@@ -143,12 +143,12 @@ const otherPosts = data.data.posts.edges.filter(
           {/* Main column */}
           <div className="lg:col-span-8">
             <ArticleBodySection content={data.data.post.content}/>
-            <AuthorBioSection />
-            <ShareArticleSection />
+            <AuthorBioSection author={data.data.post.author?.node} />
+            <ShareArticleSection url={data.data.post.slug} />
           </div>
 
           {/* Sidebar */}
-          <OtherArticlesSection />
+          <OtherArticlesSection otherPosts={otherPosts} />
         </div>
       </section>
     </>

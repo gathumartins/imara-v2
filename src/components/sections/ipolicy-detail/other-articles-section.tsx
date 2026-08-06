@@ -1,55 +1,52 @@
 import Link from "next/link"
 import { Scale } from "lucide-react"
+import { PostEdge } from "@/types/post"
 
-const OTHER_ARTICLES = [
-  {
-    date: "Jan 24, 2024",
-    title: "How Imara Fellows Are Reshaping County Governance",
-    gradient: "from-navy-900 to-blue-700",
-  },
-  {
-    date: "Jan 24, 2024",
-    title: "Community Collaboration: What Listening First Really Looks Like",
-    gradient: "from-navy-800 to-navy-900",
-  },
-  {
-    date: "Jan 24, 2024",
-    title: "Online Learning: Why We Partner with Global Universities",
-    gradient: "from-blue-700 to-navy-800",
-  },
-  {
-    date: "Jan 24, 2024",
-    title: "Why Africa's Public Sector Needs More Young Leaders — Now",
-    gradient: "from-gold-700 to-navy-900",
-  },
-]
-
-export function OtherArticlesSection() {
+export function OtherArticlesSection({otherPosts}: {otherPosts: PostEdge[]}) {
   return (
     <aside className="lg:col-span-4">
       <div className="sticky top-24">
-        <h4 className="text-ui-bold text-blue-700">Other Articles</h4>
+        <h4 className="text-ui-bold text-blue-700">Other Policies</h4>
         <ul className="mt-4 divide-y divide-gray-100">
-          {OTHER_ARTICLES.map((item) => (
-            <li key={item.title} className="py-4 first:pt-0">
-              <Link href="/ipolicy" className="group flex gap-3">
-                <span
-                  className={`h-16 w-16 shrink-0 rounded-lg bg-gradient-to-br ${item.gradient}`}
-                  aria-hidden="true"
-                />
-                <span className="flex flex-col gap-1">
-                  <span className="text-caption text-gray-500">{item.date}</span>
-                  <span className="text-body-s font-medium text-navy-900 group-hover:text-blue-700">
-                    {item.title}
+          {otherPosts.map((post) => {
+            const date = new Date(post.node.date);
+            const formattedDate = new Intl.DateTimeFormat("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            }).format(date);
+
+            return (
+              <li key={post.node.id} className="py-4 first:pt-0">
+                <Link
+                  href={`/blog/${post.node.slug}`}
+                  className="group flex gap-3"
+                >
+                  <span
+                    className={`h-16 w-16 shrink-0 rounded-lg bg-gradient-to-br from-blue-100 to-blue-200 p-3 text-blue-700 group-hover:from-blue-200 group-hover:to-blue-300`}
+                    style={{
+                      backgroundImage: `url(${post.node.featuredImage?.node?.sourceUrl})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <span className="flex flex-col gap-1">
+                    <span className="text-caption text-gray-500">
+                      {formattedDate}
+                    </span>
+                    <span className="text-body-s font-medium text-navy-900 group-hover:text-blue-700">
+                      {post.node.title}
+                    </span>
                   </span>
-                </span>
-              </Link>
-            </li>
-          ))}
+                </Link>
+              </li>
+            )
+          })}
         </ul>
 
         <Link
-          href="/ipolicy"
+          href="/blog"
           className="mt-4 inline-flex items-center gap-2 text-ui-medium text-blue-700 hover:underline"
         >
           <Scale className="size-4" />
@@ -57,5 +54,5 @@ export function OtherArticlesSection() {
         </Link>
       </div>
     </aside>
-  )
+  );
 }
