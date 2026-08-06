@@ -122,11 +122,12 @@ export default async function AboutPage() {
   const data = await result.json();
   const mini = data.data.page.pageBanners;
   const homePrograms = data.data.programs.edges;
+  const breadcrumb = data.data.page.title;
 
   return (
     <>
       <PageHero
-        breadcrumbLabel="About Us"
+        breadcrumbLabel={breadcrumb}
         title={
           <div className="[&_span]:text-gold-700 [&_br]:hidden md:[&_br]:block" dangerouslySetInnerHTML={{ __html: mini.newPageTitle }} />
         }
