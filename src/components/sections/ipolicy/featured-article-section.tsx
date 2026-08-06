@@ -12,6 +12,24 @@ export function FeaturedArticleSection({post}: {post?: PostEdge}) {
         year: "numeric",
       }).format(date)
     : null
+  const displayAuthor = post?.node.ipolicyFields?.author?.name
+    ? {
+        name: post.node.ipolicyFields.author.name,
+        avatarUrl: post.node.ipolicyFields.author.image?.node?.mediaItemUrl || null,
+      }
+    : post?.node.author?.node
+      ? {
+          name: post.node.author.node.name,
+          avatarUrl: post.node.author.node.avatar?.url || null,
+        }
+      : null
+  const authorName = displayAuthor?.name || "Author"
+  const authorInitials = authorName
+    .split(" ")
+    .filter(Boolean)
+    .map((namePart) => namePart[0])
+    .join("") || "A"
+
   return (
     <section className="bg-white py-20 md:py-24">
       <div className="container-page">
@@ -54,15 +72,20 @@ export function FeaturedArticleSection({post}: {post?: PostEdge}) {
               Read the full article
             </Link>
             <div className="mt-2 flex items-center gap-3 border-t border-gold-500/20 pt-5">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-navy-900 text-caption font-bold text-white">
-                {post?.node.author?.node.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
+              <div className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-navy-900 text-caption font-bold text-white">
+                {displayAuthor?.avatarUrl ? (
+                  <img
+                    src={displayAuthor.avatarUrl}
+                    alt={authorName}
+                    className="size-full object-cover"
+                  />
+                ) : (
+                  authorInitials
+                )}
               </div>
               <div>
                 <p className="text-ui-medium font-bold text-navy-900">
-                  {post?.node.author?.node.name}
+                  {authorName}
                 </p>
                 <p className="text-caption text-gray-500">
                   Imara Fellow &middot; {formattedDate}

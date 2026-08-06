@@ -13,6 +13,16 @@ const query = `
 query NewQuery($iPolicyId:ID!){
   post:post(id:$iPolicyId, idType: SLUG) {
     id
+    ipolicyFields {
+          author {
+            name
+            image {
+              node {
+                mediaItemUrl
+              }
+            }
+          }
+        }
     slug
     title
     content
@@ -94,6 +104,18 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
 const otherPosts = data.data.posts.edges.filter(
   (post: PostEdge) => post.node.id !== data.data.post.id,
 );
+const displayAuthor = data.data.post.ipolicyFields?.author?.name
+  ? {
+      name: data.data.post.ipolicyFields.author.name,
+      avatarUrl: data.data.post.ipolicyFields.author.image?.node?.mediaItemUrl || null,
+    }
+  : data.data.post.author?.node
+    ? {
+        name: data.data.post.author.node.name,
+        avatarUrl: data.data.post.author.node.avatar?.url || null,
+      }
+    : null;
+const authorInitial = displayAuthor?.name?.charAt(0)?.toUpperCase() || "A";
   return (
     <>
       <PageHero
@@ -105,18 +127,18 @@ const otherPosts = data.data.posts.edges.filter(
       >
         <div className="mt-10 flex max-w-3xl flex-wrap items-center justify-center gap-3">
           <div className="flex size-9 items-center justify-center overflow-hidden rounded-full bg-gold-600 text-caption font-bold text-white">
-            {data.data.post.author?.node?.avatar?.url ? (
+            {displayAuthor?.avatarUrl ? (
               <img
-                src={data.data.post.author.node.avatar.url}
-                alt={data.data.post.author.node.name}
+                src={displayAuthor.avatarUrl}
+                alt={displayAuthor.name}
                 className="size-full object-cover"
               />
             ) : (
-              data.data.post.author?.node?.name?.charAt(0)?.toUpperCase() || "A"
+              authorInitial
             )}
           </div>
           <span className="text-body-s font-medium text-white/60">
-            {data.data.post.author?.node?.name || "Author"}
+            {displayAuthor?.name || "Author"}
           </span>
           <span className="text-white/60" aria-hidden="true">
             &middot;
@@ -143,7 +165,7 @@ const otherPosts = data.data.posts.edges.filter(
           {/* Main column */}
           <div className="lg:col-span-8">
             <ArticleBodySection content={data.data.post.content}/>
-            <AuthorBioSection author={data.data.post.author?.node} />
+            <AuthorBioSection author={displayAuthor} />
             <ShareArticleSection url={data.data.post.slug} />
           </div>
 

@@ -26,6 +26,16 @@ export default async function IPolicyPage() {
     edges {
       node {
         id
+        ipolicyFields {
+          author {
+            name
+            image {
+              node {
+                mediaItemUrl
+              }
+            }
+          }
+        }
         title
         content
         date
