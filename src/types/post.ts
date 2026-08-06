@@ -19,12 +19,26 @@ export type PostFeaturedImage = {
   sourceUrl: string
 }
 
+export type PostIpolicyAuthorImage = {
+  node: {
+    mediaItemUrl: string | null
+  } | null
+}
+
+export type PostIpolicyAuthor = {
+  name: string | null
+  image: PostIpolicyAuthorImage | null
+}
+
 export type PostNode = {
   id: string
   title: string
   content: string
   date: string
   slug: string
+  ipolicyFields?: {
+    author?: PostIpolicyAuthor | null
+  } | null
   categories: {
     edges: Array<{
       node: PostCategory
