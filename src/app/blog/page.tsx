@@ -14,7 +14,7 @@ export default async function IPolicyPage() {
     slug
     link
     pageBanners {
-      pageTitle
+      newPageTitle
       bannerImage {
         node {
           mediaItemUrl
@@ -78,6 +78,7 @@ export default async function IPolicyPage() {
       );
       const data = await result.json();
       const mini = data.data.page.pageBanners;
+      const breadcrumb = data.data.page.title;
       const posts = data.data.posts.edges as PostEdge[];
       const categoryId = "dGVybToxMw==";
       const post = posts
@@ -97,13 +98,12 @@ export default async function IPolicyPage() {
   return (
     <>
       <PageHero
-        breadcrumbLabel="iPolicy"
+        breadcrumbLabel={breadcrumb}
         title={
-          <>
-            Stay updated
-            <br />
-            with the <span className="text-gold-700">Latest</span>
-          </>
+          <div
+            className="[&_span]:text-gold-700 [&_br]:hidden md:[&_br]:block"
+            dangerouslySetInnerHTML={{ __html: mini.newPageTitle }}
+          />
         }
       />
 
@@ -112,5 +112,5 @@ export default async function IPolicyPage() {
 
       <RegisterCta />
     </>
-  )
+  );
 }
