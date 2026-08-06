@@ -98,7 +98,7 @@ export default async function IPolicyPage() {
       />
 
       <FeaturedArticleSection post={post} />
-      <LatestArticlesSection />
+      <LatestArticlesSection posts={otherPosts} />
 
       <RegisterCta />
     </>

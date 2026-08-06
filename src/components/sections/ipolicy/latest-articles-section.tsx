@@ -6,6 +6,7 @@ import {
   Scale,
   Users,
 } from "lucide-react"
+import { PostEdge } from "@/types/post"
 
 const ARTICLES = [
   {
@@ -64,36 +65,39 @@ const ARTICLES = [
   },
 ]
 
-export function LatestArticlesSection() {
+export function LatestArticlesSection({ posts }: { posts: PostEdge[] }) {
   return (
     <section className="bg-white pb-20 md:pb-24">
       <div className="container-page">
         <p className="mb-3 text-tag text-alert">Latest Articles</p>
         <h2 className="mb-10 text-navy-900">More from the fellowship</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {ARTICLES.map((article) => {
-            const Icon = article.icon
+          {posts.map((post) => {
             return (
               <article
-                key={article.title}
+                key={post.node.id}
                 className="flex flex-col overflow-hidden rounded-2xl bg-gold-100"
               >
-                <div className="relative flex h-36 items-center justify-center bg-gradient-to-br from-blue-700/10 to-navy-900/10">
-                  <Icon className="size-10 text-blue-700/30" aria-hidden="true" />
-                  <span
-                    className={`absolute top-4 left-4 rounded-full bg-white px-3 py-1 text-tag ${article.badgeColor}`}
-                  >
-                    {article.badge}
-                  </span>
-                </div>
+                <div
+                  className="relative flex h-36 items-center justify-center overflow-hidden bg-cover bg-center bg-linear-to-br from-blue-700/10 to-navy-900/10"
+                  style={
+                    post.node.featuredImage?.node?.sourceUrl
+                      ? {
+                          backgroundImage: `linear-gradient(135deg, rgba(2, 10, 31, 0.15), rgba(37, 99, 235, 0.2)), url(${post.node.featuredImage.node.sourceUrl})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }
+                      : undefined
+                  }
+                />
                 <div className="flex flex-1 flex-col gap-3 p-6">
-                  <p className="text-caption text-gray-500">{article.date}</p>
+                  <p className="text-caption text-gray-500">{post.node.date}</p>
                   <h4 className="text-ui-bold text-navy-900">
-                    {article.title}
+                    {post.node.title}
                   </h4>
-                  <p className="text-body-s text-gray-600">{article.description}</p>
+                  <div className="text-body-s text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{ __html: post.node.content }} />
                   <Link
-                    href="/ipolicy/detail"
+                    href={`/blog/${post.node.slug}`}
                     className="mt-auto w-fit text-ui-medium text-blue-700 underline underline-offset-4 hover:text-navy-900"
                   >
                     Read More
