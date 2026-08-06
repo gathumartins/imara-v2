@@ -2,20 +2,47 @@ import { PageHero } from "@/components/shared/page-hero"
 import { RegisterCta } from "@/components/shared/register-cta"
 import { TermsContent } from "@/components/sections/terms/terms-content"
 
-export default function TermsAndConditionsPage() {
+export default async function TermsAndConditionsPage() {
+      const query = `
+  {
+  page:page(id: "cG9zdDoyNw==") {
+    id
+    title
+    uri
+    slug
+    link
+    content
+    pageBanners {
+      newPageTitle
+      bannerImage {
+        node {
+          mediaItemUrl
+        }
+      }
+    }
+  }
+}
+  `;
+
+      const result = await fetch(
+        `${process.env.WORDPRESS_API_URL}?query=${encodeURIComponent(query)}`,
+        { headers: { "Content-Type": "application/json" } },
+      );
+      const data = await result.json();
+      const mini = data.data.page.pageBanners;
+      const breadcrumb = data.data.page.title;
   return (
     <>
       <PageHero
-        breadcrumbLabel="Terms & Conditions"
+        breadcrumbLabel={breadcrumb}
         title={
-          <>
-            Program Rules and
-            <br />
-            <span className="text-gold-700">Guidelines</span>
-          </>
+          <div
+            className="[&_span]:text-gold-700 [&_br]:hidden md:[&_br]:block"
+            dangerouslySetInnerHTML={{ __html: mini.newPageTitle }}
+          />
         }
       />
-      <TermsContent />
+      <TermsContent content={data.data.page.content} />
       <RegisterCta />
     </>
   )
