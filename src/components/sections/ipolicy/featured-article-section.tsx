@@ -15,7 +15,7 @@ export function FeaturedArticleSection({post}: {post?: PostEdge}) {
   return (
     <section className="bg-white py-20 md:py-24">
       <div className="container-page">
-        <p className="mb-4 text-tag text-blue-700">Featured Article</p>
+        <p className="mb-4 text-tag text-blue-700">Featured Policy</p>
         <div className="grid overflow-hidden rounded-2xl bg-gold-100 md:grid-cols-2">
           <div
             className="relative flex min-h-64 items-center justify-center overflow-hidden bg-cover bg-center bg-linear-to-br from-navy-900 via-blue-700 to-blue-500"

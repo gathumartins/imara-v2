@@ -69,7 +69,7 @@ export function LatestArticlesSection({ posts }: { posts: PostEdge[] }) {
   return (
     <section className="bg-white pb-20 md:pb-24">
       <div className="container-page">
-        <p className="mb-3 text-tag text-alert">Latest Articles</p>
+        <p className="mb-3 text-tag text-alert">Latest Policies</p>
         <h2 className="mb-10 text-navy-900">More from the fellowship</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => {
