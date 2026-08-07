@@ -168,6 +168,24 @@ export type TestimonialNode = {
   } | null
 }
 
+export type TeamNode = {
+  title?: string | null
+  content?: string | null
+  featuredImage?: {
+    node: {
+      altText?: string | null
+      mediaDetails?: {
+        height?: number | null
+        width?: number | null
+      } | null
+      sourceUrl?: string | null
+    } | null
+  } | null
+  teamfields?: {
+    designation?: string | null
+  } | null
+}
+
 export type ProgramNode = {
   title?: string | null
   slug?: string | null

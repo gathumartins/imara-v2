@@ -1,42 +1,17 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
-const PROGRAMME_COMPONENTS = [
-  {
-    number: "01",
-    id: "residential-academy",
-    emoji: "🏕️",
-    title: "Residential Academy",
-    description:
-      "Intensive residential sessions structured around core themes — leadership principles, policy frameworks, and the socio-political landscape of Kenya.",
-  },
-  {
-    number: "02",
-    id: "online-learning",
-    emoji: "💻",
-    title: "Online Learning",
-    description:
-      "Fellows are sponsored to undertake a certificate course in policy and governance from a globally recognised university.",
-  },
-  {
-    number: "03",
-    id: "experiential-learning",
-    emoji: "🤝",
-    title: "Community Collaboration",
-    description:
-      "A year of community engagement through county government visits, focus group discussions, and community forums.",
-  },
-  {
-    number: "04",
-    id: "lectures",
-    emoji: "🎤",
-    title: "Public Lectures & Leadership Cafes",
-    description:
-      "Curated public forums and leadership café discussions bringing fellows into conversation with senior policymakers.",
-  },
-]
+import type { ProgramNode } from "@/types/post"
 
-export function ProgrammeComponentsSection() {
+const PROGRAM_EMOJIS = ["🏕️", "💻", "🤝", "🎤"]
+
+export function ProgrammeComponentsSection({
+  programs,
+}: {
+  programs?: Array<{ node?: ProgramNode | null }> | null
+}) {
+  const items = programs?.map((edge) => edge?.node).filter((node): node is ProgramNode => Boolean(node)) ?? []
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-tr from-navy-900 via-blue-700 to-blue-500 py-20 md:py-24">
       <div
@@ -55,28 +30,28 @@ export function ProgrammeComponentsSection() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {PROGRAMME_COMPONENTS.map((item) => (
-            <div
-              key={item.id}
-              id={item.id}
-              className="scroll-mt-24 flex flex-col rounded-lg border border-white/15 bg-white/5 p-6"
+          {items.map((item, index) => (
+            <Link
+              key={item.slug ?? item.title ?? index}
+              href={`/program/${item.slug}`}
+              className="flex flex-col rounded-lg border border-white/15 bg-white/5 p-6 transition-colors hover:bg-white/10"
             >
-              <span className="text-caption text-blue-300">{item.number}</span>
+              <span className="text-caption text-blue-300">
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <div className="mt-4 flex size-11 items-center justify-center rounded-xl bg-white/10 text-xl">
-                {item.emoji}
+                {PROGRAM_EMOJIS[index % PROGRAM_EMOJIS.length]}
               </div>
-              <h4 className="mt-6 text-ui-bold text-white">
-                {item.title}
-              </h4>
-              <p className="mt-2 text-body-s text-blue-300">{item.description}</p>
-              <Link
-                href={`/about#${item.id}`}
-                className="mt-auto flex w-fit items-center gap-1 pt-5 text-ui-medium text-gold-600 hover:underline"
-              >
+              <h4 className="mt-6 text-ui-bold text-white">{item.title}</h4>
+              <div
+                className="mt-2 line-clamp-3 text-body-s text-blue-300"
+                dangerouslySetInnerHTML={{ __html: item.excerpt ?? item.content ?? "" }}
+              />
+              <span className="mt-auto flex w-fit items-center gap-1 pt-5 text-ui-medium text-gold-600">
                 Learn more
                 <ArrowRight className="size-4" />
-              </Link>
-            </div>
+              </span>
+            </Link>
           ))}
         </div>
       </div>

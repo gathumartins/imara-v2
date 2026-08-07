@@ -122,6 +122,7 @@ export default async function AboutPage() {
   const data = await result.json();
   const mini = data.data.page.pageBanners;
   const homePrograms = data.data.programs.edges;
+  const teams = data.data.teams.edges;
   const breadcrumb = data.data.page.title;
 
   return (
@@ -135,8 +136,8 @@ export default async function AboutPage() {
 
       <IntroSection />
       <MissionValuesSection />
-      <ProgrammeComponentsSection />
-      <AlumniTeamSection />
+      <ProgrammeComponentsSection programs={homePrograms} />
+      <AlumniTeamSection teams={teams} />
 
       <RegisterCta />
     </>
