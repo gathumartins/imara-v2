@@ -170,7 +170,7 @@ page:page(id: "cG9zdDoxMA==") {
       <ImpactSection stats={homeStats} />
       <ProgramComponentsSection heading={programHeading} programs={homePrograms} />
       <TestimonialsSection />
-      <AboutSection />
+      <AboutSection about={homeAbout} stats={homeStats} />
       <RegisterCta />
     </>
   )
