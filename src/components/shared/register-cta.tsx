@@ -1,14 +1,54 @@
 import Link from "next/link"
-import { ArrowRight, Mail } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { NewsletterForm } from "@/components/shared/newsletter-form"
 
-/**
- * Shared "Register for the next cohort" band used near the bottom of
- * every page, right before the footer: cohort CTA card + newsletter
- * signup. Fully self-contained — drop it in with no props.
- */
-export function RegisterCta({ cohortLabel = "Cohort 9 — 2026" }: { cohortLabel?: string }) {
+export async function RegisterCta({ cohortLabel = "Cohort 9 — 2026" }: { cohortLabel?: string }) {
+  const query = `
+  {
+    layout: layout(id: "cG9zdDo5OQ==") {
+      headerFooter {
+        newlogo {
+          node {
+            sourceUrl
+          }
+        }
+        register {
+          registerTitle
+          registerDescription
+          buttonLink {
+            title
+            target
+            url
+          }
+          video
+          registerImage {
+            node {
+              sourceUrl
+              mediaDetails {
+                height
+                width
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  `;
+
+  const result = await fetch(
+    `${process.env.WORDPRESS_API_URL}?query=${encodeURIComponent(query)}`,
+    { headers: { "Content-Type": "application/json" } },
+  );
+  const data = await result.json();
+  const register = data.data.layout.headerFooter.register;
+
+  const buttonHref = register?.buttonLink?.url ?? "#"
+  const buttonLabel = register?.buttonLink?.title ?? "Register for Fellowship"
+  const buttonTarget = register?.buttonLink?.target || undefined
+
   return (
     <section className="bg-blue-100 py-20 md:py-24">
       <div className="container-page">
@@ -19,19 +59,27 @@ export function RegisterCta({ cohortLabel = "Cohort 9 — 2026" }: { cohortLabel
                 <span className="size-1.5 rounded-full bg-success" />
                 {cohortLabel}
               </span>
-              <h2 className="mt-5 text-white">
-                Excited to Join us? Register{" "}
-                <span className="text-gold-700">for our next intake</span>
-              </h2>
-              <p className="mt-4 text-body text-blue-100">
-                At Imara Fellowship, we nurture bold leaders driving governance
-                and policy change. If you&apos;re passionate about leadership
-                and impact, this is for you. Applications for our next cohort
-                are now open!
-              </p>
+              <div
+                className="mt-5 text-h2 text-white [&_span]:text-gold-700"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    register?.registerTitle ??``,
+                }}
+              />
+              <div
+                className="mt-4 text-body text-blue-100"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    register?.registerDescription ?? "",
+                }}
+              />
               <Button asChild variant="gold" size="md" className="mt-8">
-                <a href="#" target="_blank" rel="noopener noreferrer" className="flex w-fit items-center gap-2">
-                  Register for Fellowship
+                <a
+                  href={buttonHref}
+                  {...(buttonTarget ? { target: buttonTarget, rel: "noopener noreferrer" } : {})}
+                  className="flex w-fit items-center gap-2"
+                >
+                  {buttonLabel}
                   <ArrowRight className="size-4" />
                 </a>
               </Button>
@@ -43,22 +91,7 @@ export function RegisterCta({ cohortLabel = "Cohort 9 — 2026" }: { cohortLabel
                 Get fellowship updates, policy insights, and alumni stories
                 delivered to your inbox.
               </p>
-              <form className="mt-6 flex flex-col gap-3">
-                <div className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-3">
-                  <Mail className="size-4 text-blue-100" />
-                  <input
-                    type="email"
-                    required
-                    name="email"
-                    placeholder="Your email address"
-                    aria-label="Email address"
-                    className="w-full bg-transparent text-body-s text-white placeholder:text-blue-300 focus:outline-none"
-                  />
-                </div>
-                <Button type="submit" variant="white" className="w-full">
-                  Subscribe
-                </Button>
-              </form>
+              <NewsletterForm />
               <p className="mt-4 text-caption text-blue-300">
                 No spam. Unsubscribe any time. We send 1-2 newsletters per
                 month.
