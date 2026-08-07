@@ -1,43 +1,36 @@
 import { TestimonialCarousel, type Testimonial } from "@/components/shared/testimonial-carousel"
+import type { TestimonialNode } from "@/types/post"
 
-// Only one testimonial has confirmed real copy + a matching photo (see the
-// Mission section rebuild notes on the Kwabena Asante photo/name mismatch
-// fix). TestimonialCarousel is fully data-driven — add more real entries
-// here as they become available.
-const TESTIMONIALS: Testimonial[] = [
-  {
-    quote:
-      "Imara didn't just teach me about policy — it immersed me in it. I left with the analytical tools, the mentors, and frankly the audacity to walk into a minister's office and make the case for change.",
-    name: "Kwabena Asante",
-    initials: "KA",
-    role: "Cohort 3 Fellow · Nairobi",
-    cohortBadge: "Cohort 3",
-    photoSrc: "/kwabena-asante.webp",
-    photoAlt: "Kwabena Asante, Imara Fellowship Cohort 3",
-  },
-  // Placeholder slides (no real quote/photo sourced yet) — demonstrates the
-  // carousel with real navigation. Names reused from the Fellows page's
-  // placeholder roster for continuity; swap for real fellow testimonials
-  // as they're collected.
-  {
-    quote:
-      "The Residential Academy pushed me further than I expected — I came in with theory and left with a network I still lean on today.",
-    name: "Amina Otieno",
-    initials: "AO",
-    role: "Cohort 4 Fellow · Health Policy",
-    cohortBadge: "Cohort 4",
-  },
-  {
-    quote:
-      "What stuck with me was the honesty of the mentorship — no one pretended governance work is easy, but they showed me how to do it well.",
-    name: "Faith Wanjiru",
-    initials: "FW",
-    role: "Cohort 2 Fellow · Youth Inclusion",
-    cohortBadge: "Cohort 2",
-  },
-]
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("")
+}
 
-export function TestimonialsSection() {
+export function TestimonialsSection({
+  testimonials,
+}: {
+  testimonials?: Array<{ node?: TestimonialNode | null }> | null
+}) {
+  const cmsTestimonials: Testimonial[] = testimonials
+    ?.map((edge) => edge?.node)
+    .filter((node): node is TestimonialNode => Boolean(node))
+    .map((node) => {
+      const name = node.title ?? "Imara Fellow"
+      const cohort = node.testimonialFields?.cohort ?? null
+
+      return {
+        quote: node.content ?? "",
+        name,
+        initials: getInitials(name),
+        role: cohort ? `${cohort} Fellow` : "Imara Fellow",
+        cohortBadge: cohort ?? "Fellow",
+      }
+    }) ?? []
+
   return (
     <section className="bg-blue-700 py-20 md:py-24">
       <div className="container-page flex flex-col gap-14">
@@ -49,7 +42,7 @@ export function TestimonialsSection() {
           <h2 className="text-white">Stories of transformation</h2>
         </div>
 
-        <TestimonialCarousel testimonials={TESTIMONIALS} />
+        <TestimonialCarousel testimonials={cmsTestimonials} />
       </div>
     </section>
   )

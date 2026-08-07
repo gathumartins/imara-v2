@@ -7,19 +7,10 @@ export interface Testimonial {
   initials: string
   role: string
   cohortBadge: string
-  /** Omit when no real photo exists yet — renders a gradient + initials placeholder instead. */
   photoSrc?: string
   photoAlt?: string
 }
 
-/**
- * Data-driven testimonial carousel — no useState/useEffect. Navigation
- * (dots + prev/next) is driven entirely by a hidden radio-per-slide group
- * (the "checkbox hack", extended to radios so only one is ever checked)
- * plus a small generated <style> block scoping visibility/active-state
- * rules to this instance's ids. Controls always render — even with a
- * single slide they're real, just inert (nowhere else to go).
- */
 export function TestimonialCarousel({
   testimonials,
   id = "testimonial",
@@ -31,9 +22,6 @@ export function TestimonialCarousel({
   const n = testimonials.length
   if (n === 0) return null
 
-  // ID-selector specificity ensures these beat the base `.hidden` class on
-  // each panel once its radio is checked — no inline styles needed (which
-  // would otherwise always win over the stylesheet regardless of state).
   const css = testimonials
     .map(
       (_, i) => `
@@ -96,9 +84,10 @@ export function TestimonialCarousel({
 
               <div className="flex flex-1 flex-col gap-6">
                 <Quote className="size-10 text-blue-300" strokeWidth={1.5} />
-                <p className="text-h3 font-normal italic text-white">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
+                <div
+                  className="text-h3 font-normal italic text-white"
+                  dangerouslySetInnerHTML={{ __html: t.quote ?? "" }}
+                />
                 <div className="flex items-center gap-3">
                   <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-white text-ui-bold text-blue-700">
                     {t.initials}

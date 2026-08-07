@@ -161,6 +161,7 @@ page:page(id: "cG9zdDoxMA==") {
     const homeApply = data.data.page.homehero.homeapply;
     const homePrograms = data.data.programs.edges;
     const homePartners = data.data.partners.edges;
+    const homeTestimonials = data.data.tests.edges;
     const programHeading = data.data.headings.siteheadings.headings.program;
   return (
     <>
@@ -169,7 +170,7 @@ page:page(id: "cG9zdDoxMA==") {
       <MissionSection apply={homeApply} />
       <ImpactSection stats={homeStats} />
       <ProgramComponentsSection heading={programHeading} programs={homePrograms} />
-      <TestimonialsSection />
+      <TestimonialsSection testimonials={homeTestimonials} />
       <AboutSection about={homeAbout} stats={homeStats} />
       <RegisterCta />
     </>
