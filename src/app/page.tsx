@@ -11,7 +11,7 @@ export default async function Home() {
     const query = `
 {
 page:page(id: "cG9zdDoxMA==") {
-  id
+    id
     title
     uri
     slug
@@ -19,13 +19,21 @@ page:page(id: "cG9zdDoxMA==") {
     content
     homehero {
       hero {
-        cta
-        heroimage {
-          node {
-            sourceUrl
+        newherotitle
+        herosubtitle
+        ctas {
+          cta {
+            label
+            value
           }
         }
-        herotitle
+        heroimages {
+          himage {
+            node {
+              mediaItemUrl
+            }
+          }
+        }
       }
       homeabout {
         excerpt
@@ -51,7 +59,7 @@ page:page(id: "cG9zdDoxMA==") {
         stats {
           figures
           title
-          description
+          suffix
         }
       }
       homeapply {
@@ -154,7 +162,7 @@ page:page(id: "cG9zdDoxMA==") {
     const homePrograms = data.data.programs.edges;
   return (
     <>
-      <HeroSection />
+      <HeroSection hero={heroData} stats={homeStats}/>
       <PartnersSection />
       <MissionSection />
       <ImpactSection />

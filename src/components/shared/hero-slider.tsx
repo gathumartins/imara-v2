@@ -3,37 +3,18 @@ import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 export interface HeroSlide {
-  /** Path to the slide image (e.g. "/hero.webp"). */
   src: string
-  /** Accessible description of the image. Leave empty if purely decorative. */
   alt?: string
-  /**
-   * Tailwind classes controlling the static crop/pan (e.g. `object-[20%_50%]`)
-   * for this slide. Zoom is handled separately by the generated per-slide
-   * animation — don't add `scale-*` here, it'll be overridden every frame.
-   */
   frame?: string
 }
 
 interface HeroSliderProps {
   slides: HeroSlide[]
-  /** Seconds each slide stays visible before crossfading to the next. */
   secondsPerSlide?: number
   className?: string
   children?: React.ReactNode
 }
 
-/**
- * Infinite-loop crossfade slider with clickable dots — no useState/useEffect.
- * Autoplay is driven by per-slide @keyframes (percentage-positioned within
- * one shared cycle). Clicking a dot checks a hidden radio for that slide;
- * a `:has()` rule then pauses+hides every slide's animation and a higher-
- * specificity id-selector rule shows just the checked one — same "checkbox
- * hack" family as the testimonial carousel and mobile menu, extended so
- * manual navigation can override a running animation. No radio is checked
- * by default, so autoplay runs freely until the first click, then manual
- * control takes over (the same trade-off most carousel libraries make).
- */
 export function HeroSlider({
   slides,
   secondsPerSlide = 6,
@@ -50,16 +31,6 @@ export function HeroSlider({
       const end = ((i + 1) / n) * 100
       const fadeInEnd = Math.min(start + fade, end)
       const fadeOutStart = Math.max(end - fade, start)
-      // Slide 0 is what's on screen the instant the page loads, so it must
-      // be fully opaque and unzoomed at 0% — fading it in from nothing here
-      // (like every other slide does at its own "start") produced a brief
-      // blank flash on load that read as a slow-loading hero image. Every
-      // other transition still crossfades; only the loop seam (last slide
-      // -> slide 0) is a hard cut now, which is far less noticeable than a
-      // flash on first paint. A slow continuous scale (Ken Burns) is layered
-      // onto the same keyframes so each slide keeps drifting through its
-      // own crossfade instead of blending between two static crops, which
-      // was reading as an abrupt "jump" rather than a smooth transition.
       const fadeKeyframe =
         i === 0
           ? `

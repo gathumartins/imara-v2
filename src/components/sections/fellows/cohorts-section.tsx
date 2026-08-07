@@ -39,6 +39,7 @@ function CohortCard({
   badge,
   title,
   fellowCount,
+
 }: {
   year: string
   badge: string
