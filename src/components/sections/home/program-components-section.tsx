@@ -10,6 +10,10 @@ import type { HomePageHeading, ProgramNode } from "@/types/post"
 
 const PROGRAM_ICONS = [BrainIcon, HandshakeIcon, WorkflowIcon, DocIcon]
 
+function stripHtml(html: string) {
+  return html.replace(/<[^>]*>/g, "").trim()
+}
+
 export function ProgramComponentsSection({
   heading,
   programs,
@@ -23,7 +27,7 @@ export function ProgramComponentsSection({
     .map((node, index) => ({
       icon: PROGRAM_ICONS[index % PROGRAM_ICONS.length],
       title: node.title ?? "",
-      description: node.excerpt ?? node.content ?? "",
+      description: stripHtml(node.excerpt ?? node.content ?? ""),
       slug: node.slug ?? "",
     })) ?? []
 
@@ -50,10 +54,7 @@ export function ProgramComponentsSection({
                 <item.icon className="size-5" />
               </span>
               <h4 className="text-ui-bold text-navy-900">{item.title}</h4>
-              <div
-                className="line-clamp-3 text-body-s text-gray-500"
-                dangerouslySetInnerHTML={{ __html: item.description }}
-              />
+              <p className="line-clamp-3 text-body-s text-gray-500">{item.description}</p>
             </Link>
           ))}
         </div>
