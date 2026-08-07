@@ -103,6 +103,7 @@ ${css}
           <Image
             key={slide.src + i}
             src={slide.src}
+            unoptimized
             alt={slide.alt ?? ""}
             fill
             priority={i === 0}
