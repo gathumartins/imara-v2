@@ -1,6 +1,9 @@
 import React from 'react'
 import type { ProgramSummaryEdge } from "@/types/post"
 import { PageHero } from "@/components/shared/page-hero";
+import ProgramTop from '@/components/sections/program/program-top';
+import ProgramOverview from '@/components/sections/program/program-overview';
+import OtherPrograms from '@/components/sections/program/other-programs';
 
 const page = async ({ params }: { params: Promise<{ programId: string }> }) => {
   const resolvedParams = await params
@@ -85,6 +88,9 @@ const page = async ({ params }: { params: Promise<{ programId: string }> }) => {
           />
         }
       />
+      <ProgramTop/>
+      <ProgramOverview/>
+      <OtherPrograms/>
     </>
   );
 }
