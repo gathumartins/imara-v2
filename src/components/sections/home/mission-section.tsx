@@ -3,22 +3,15 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { MissionShape } from "@/components/shared/mission-shape"
+import type { HomeApplySection } from "@/types/post"
 
-const GAINS = [
-  "Leadership and policy training through the Residential Academy",
-  "Mentorship from senior practitioners in government, civil society & academia",
-  "Real-world community engagement through Collaboration Clinics",
-  "A strong professional network and lifelong alumni community",
-  "Platforms for public writing and thought leadership",
-]
+export function MissionSection({ apply }: { apply?: HomeApplySection | null }) {
+  const imageSrc = apply?.homeapplymage?.node?.sourceUrl ?? "/cohort5-mission.webp"
+  const imageAlt = apply?.homeapplymage?.node?.altText ?? "Imara Fellowship Cohort 5 fellows in session"
+  const applyHref = apply?.readmore?.link ?? "#"
+  const applyLabel = apply?.readmore?.linklabel ?? "Apply Now"
+  const isExternalApply = /^https?:\/\//.test(applyHref)
 
-const ELIGIBILITY = [
-  "Be aged 18–35",
-  "Show interest or experience in public policy, governance, or civic leadership",
-  "Commit to the scheduled fellowship activities throughout the year",
-]
-
-export function MissionSection() {
   return (
     <section className="relative overflow-hidden bg-gold-100 py-20 md:py-24">
       <MissionShape
@@ -46,13 +39,14 @@ export function MissionSection() {
 
           <div className="relative flex aspect-[4/5] w-full flex-col justify-end overflow-hidden rounded-[24px] shadow-xl">
             <Image
-              src="/cohort5-mission.webp"
-              alt="Imara Fellowship Cohort 5 fellows in session"
+              unoptimized
+              src={imageSrc}
+              alt={imageAlt}
               fill
               sizes="(min-width: 1024px) 40vw, 90vw"
               className="object-cover"
             />
-            <div className="relative z-10 m-4 flex flex-col gap-3 rounded-lg bg-white/95 p-5 shadow-lg sm:m-6">
+            {/* <div className="relative z-10 m-4 flex flex-col gap-3 rounded-lg bg-white/95 p-5 shadow-lg sm:m-6">
               <p className="text-body-s text-navy-900">
                 &ldquo;The Imara Fellowship transformed how I think about
                 policy — and gave me the network to actually make change
@@ -71,67 +65,34 @@ export function MissionSection() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <h2>
-            Imara Africa Fellowship -{" "}
-            <span className="text-blue-700">Cohort 5</span>
-          </h2>
-          <p className="text-body text-gray-600">
-            The Imara Africa Fellowship is a transformative leadership
-            development programme for young Kenyans aged 18–35 who are
-            passionate about governance, policy, and civic leadership.
-            Through a blend of intensive training, mentorship, and
-            experiential learning, the fellowship prepares emerging leaders
-            for meaningful roles in public service and community
-            transformation.
-          </p>
-
-          <div className="flex flex-col gap-3">
-            <h4 className="text-ui-bold text-navy-900">
-              What You Will Gain
-            </h4>
-            <ol className="flex flex-col gap-2">
-              {GAINS.map((gain, i) => (
-                <li key={gain} className="flex gap-3 text-body-s text-gray-600">
-                  <span className="shrink-0 text-ui-medium text-blue-700">
-                    {i + 1}.
-                  </span>
-                  {gain}
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <h4 className="text-ui-bold text-navy-900">Eligibility</h4>
-            <p className="text-body-s text-gray-600">Applicants must:</p>
-            <ol className="flex flex-col gap-2">
-              {ELIGIBILITY.map((item, i) => (
-                <li key={item} className="flex gap-3 text-body-s text-gray-600">
-                  <span className="shrink-0 text-ui-medium text-blue-700">
-                    {i + 1}.
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ol>
-            <p className="text-body-s text-gray-600">
-              Women, persons with disabilities, and applicants from
-              marginalized communities are strongly encouraged to apply.
-            </p>
-          </div>
-
+        <div className="flex flex-col gap-6 [&_span]:text-blue-700 [&_h2]:text-navy-900 [&_p]:text-gray-600">
+            <h2>{apply?.title}</h2>
+          <div
+            className="text-body-s text-gray-600 [&_h4]:text-ui-bold [&_h4]:my-3 [&_h4]:text-navy-900 [&_ol]:list-inside [&_ol]:list-decimal [&_ol]:pl-3 [&_ol>li]:mb-2 [&_ul]:list-inside [&_ul]:list-disc [&_ul]:pl-3 [&_ul>li]:mb-2 [&_p]:mb-4"
+            dangerouslySetInnerHTML={{
+              __html:
+                apply?.excerpt ??
+                "The Imara Africa Fellowship is a transformative leadership development programme for young Kenyans aged 18–35 who are passionate about governance, policy, and civic leadership. Through a blend of intensive training, mentorship, and experiential learning, the fellowship prepares emerging leaders for meaningful roles in public service and community transformation.",
+            }}
+          />
           <div>
             <Button asChild size="md">
-              <a href="#" target="_blank" rel="noopener noreferrer">Apply Now</a>
+              <a
+                href={applyHref}
+                {...(isExternalApply
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                {applyLabel}
+              </a>
             </Button>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

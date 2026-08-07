@@ -166,7 +166,7 @@ page:page(id: "cG9zdDoxMA==") {
     <>
       <HeroSection hero={heroData} stats={homeStats}/>
       <PartnersSection partners={homePartners} />
-      <MissionSection />
+      <MissionSection apply={homeApply} />
       <ImpactSection stats={homeStats} />
       <ProgramComponentsSection heading={programHeading} programs={homePrograms} />
       <TestimonialsSection />
