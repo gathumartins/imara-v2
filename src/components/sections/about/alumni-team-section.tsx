@@ -1,5 +1,7 @@
 import Image from "next/image"
+import Link from "next/link"
 import { User } from "lucide-react"
+import { FaFacebookF, FaLinkedinIn, FaXTwitter } from "react-icons/fa6"
 
 import type { TeamNode } from "@/types/post"
 
@@ -11,9 +13,9 @@ const CARD_COLORS = [
 ]
 
 const SOCIALS = [
-  { icon: "in", label: "LinkedIn" },
-  { icon: "𝕏", label: "Twitter" },
-  { icon: "f", label: "Facebook" },
+  { icon: FaFacebookF, label: "Facebook", href: "https://www.facebook.com/imaraAfr" },
+  { icon: FaXTwitter, label: "Twitter", href: "https://x.com/Imara_Africa" },
+  { icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.instagram.com/imarafellowship/" },
 ]
 
 function getInitials(name: string) {
@@ -83,15 +85,16 @@ export function AlumniTeamSection({
                   <p className="mt-1 text-caption text-gray-400 font-medium">{role}</p>
                   <div className="mt-5 flex gap-2">
                     {SOCIALS.map((social) => (
-                      <span
+                      <Link
                         key={social.label}
-                        role="button"
-                        tabIndex={0}
+                        href={social.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         aria-label={`${name} on ${social.label}`}
-                        className="flex size-7 items-center justify-center rounded-[4px] bg-white text-caption font-bold text-gray-400 cursor-pointer hover:bg-blue-700 hover:text-white transition-all shadow-sm border border-gray-200/60"
+                        className="flex size-7 items-center justify-center rounded-[4px] bg-white text-caption font-bold text-gray-400 hover:bg-blue-700 hover:text-white transition-all shadow-sm border border-gray-200/60"
                       >
-                        {social.icon}
-                      </span>
+                        <social.icon />
+                      </Link>
                     ))}
                   </div>
                 </div>
