@@ -160,13 +160,15 @@ page:page(id: "cG9zdDoxMA==") {
     const homeAbout = data.data.page.homehero.homeabout;
     const homeApply = data.data.page.homehero.homeapply;
     const homePrograms = data.data.programs.edges;
+    const homePartners = data.data.partners.edges;
+    const programHeading = data.data.headings.siteheadings.headings.program;
   return (
     <>
       <HeroSection hero={heroData} stats={homeStats}/>
-      <PartnersSection />
+      <PartnersSection partners={homePartners} />
       <MissionSection />
-      <ImpactSection />
-      <ProgramComponentsSection />
+      <ImpactSection stats={homeStats} />
+      <ProgramComponentsSection heading={programHeading} programs={homePrograms} />
       <TestimonialsSection />
       <AboutSection />
       <RegisterCta />

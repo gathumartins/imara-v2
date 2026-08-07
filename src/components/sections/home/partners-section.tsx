@@ -1,11 +1,19 @@
-const PARTNERS = [
-  { name: "TADI", src: "/partnerLogos/tadiLogo.svg" },
-  { name: "Siasa Place", src: "/partnerLogos/siasaPlace.svg" },
-  { name: "UNDP Africa", src: "/partnerLogos/logo3.svg" },
-  { name: "AYLF", src: "/partnerLogos/aylf-logo.svg" },
-]
+import type { PartnerNode } from "@/types/post"
 
-export function PartnersSection() {
+export function PartnersSection({
+  partners,
+}: {
+  partners?: Array<{ node?: PartnerNode | null }> | null
+}) {
+  const logos = partners
+    ?.map((edge) => edge?.node)
+    .filter((node): node is PartnerNode => Boolean(node))
+    .map((node) => ({
+      name: node.title ?? "Partner",
+      src: node.featuredImage?.node?.sourceUrl ?? null,
+    }))
+    .filter((partner): partner is { name: string; src: string } => Boolean(partner.src)) ?? []
+
   return (
     <section className="bg-white py-12 md:py-16 border-y border-gray-100">
       <div className="container-page flex flex-col items-center gap-6 md:gap-8 text-center">
@@ -13,8 +21,8 @@ export function PartnersSection() {
           Trusted by and partnered with
         </p>
         <div className="grid grid-cols-2 items-center justify-items-center gap-6 w-full max-w-3xl sm:flex sm:flex-wrap sm:justify-center sm:gap-12 md:gap-16">
-          {PARTNERS.map((partner) => (
-            <div key={partner.name} className="flex h-14 w-full items-center justify-center p-2 sm:h-20 sm:w-auto">
+          {logos.map((partner, index) => (
+            <div key={`${partner.name}-${index}`} className="flex h-14 w-full items-center justify-center rounded-xl border border-gray-200 p-2 sm:h-20 sm:w-auto sm:px-6">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={partner.src}
