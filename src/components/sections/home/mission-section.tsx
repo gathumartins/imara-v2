@@ -69,8 +69,11 @@ export function MissionSection({ apply }: { apply?: HomeApplySection | null }) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 [&_span]:text-blue-700 [&_h2]:text-navy-900 [&_p]:text-gray-600">
-            <h2>{apply?.title}</h2>
+        <div className="flex flex-col gap-6 [&_h2]:text-navy-900 [&_p]:text-gray-600">
+          <div
+            className="text-h2 [&_span]:text-blue-700 text-navy-900"
+            dangerouslySetInnerHTML={{ __html: apply?.title ?? "" }}
+          />
           <div
             className="text-body-s text-gray-600 [&_h4]:text-ui-bold [&_h4]:my-3 [&_h4]:text-navy-900 [&_ol]:list-inside [&_ol]:list-decimal [&_ol]:pl-3 [&_ol>li]:mb-2 [&_ul]:list-inside [&_ul]:list-disc [&_ul]:pl-3 [&_ul>li]:mb-2 [&_p]:mb-4"
             dangerouslySetInnerHTML={{
