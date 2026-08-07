@@ -45,7 +45,7 @@ export function AlumniTeamSection({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {members.map((member, index) => {
             const name = member.title ?? "Team Member"
             const role = member.teamfields?.designation ?? ""

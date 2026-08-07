@@ -134,7 +134,8 @@ export function MissionValuesSection() {
                 </div>
                 <h3 className="text-h3 text-navy-900">
                   To develop African leaders who{" "}
-                  <span className="text-blue-700">transform</span> Kenya&apos;s public sector
+                  <span className="text-blue-700">transform</span>{" "}
+                  Kenya&apos;s public sector
                 </h3>
                 <p className="mt-6 text-body text-gray-500 font-medium leading-relaxed">
                   To develop African leaders who exemplify integrity, social empathy, creativity,
