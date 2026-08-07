@@ -32,14 +32,10 @@ export function AboutSection({
             <span className="h-0.5 w-5 bg-gold-600" />
             <p className="text-tag text-blue-700">About Us</p>
           </div>
-          {about?.title ? (
-            <h2>{about.title}</h2>
-          ) : (
-            <h2>
-              A new generation of <br />
-              <span className="text-blue-700">African leaders</span>
-            </h2>
-          )}
+          <div
+            className="text-h2 [&_span]:text-blue-700 text-navy-900 [&_br]:hidden md:[&_br]:inline-block"
+            dangerouslySetInnerHTML={{ __html: about?.title ?? "" }}
+          />
           <div
             className="text-body text-gray-500 max-lg:line-clamp-3 lg:line-clamp-6"
             dangerouslySetInnerHTML={{
