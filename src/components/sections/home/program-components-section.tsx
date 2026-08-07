@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import {
   BrainIcon,
   DocIcon,
@@ -22,6 +24,7 @@ export function ProgramComponentsSection({
       icon: PROGRAM_ICONS[index % PROGRAM_ICONS.length],
       title: node.title ?? "",
       description: node.excerpt ?? node.content ?? "",
+      slug: node.slug ?? "",
     })) ?? []
 
   return (
@@ -38,9 +41,10 @@ export function ProgramComponentsSection({
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {programComponents.map((item, index) => (
-            <div
+            <Link
               key={`${item.title}-${index}`}
-              className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-8"
+              href={`/program/${item.slug}`}
+              className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-lg"
             >
               <span className="flex size-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
                 <item.icon className="size-5" />
@@ -50,7 +54,7 @@ export function ProgramComponentsSection({
                 className="line-clamp-3 text-body-s text-gray-500"
                 dangerouslySetInnerHTML={{ __html: item.description }}
               />
-            </div>
+            </Link>
           ))}
         </div>
       </div>
