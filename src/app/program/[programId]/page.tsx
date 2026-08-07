@@ -73,6 +73,9 @@ const page = async ({ params }: { params: Promise<{ programId: string }> }) => {
     const data = await res.json();
     const mini = data.data.program.pageBanners;
     const breadcrumb = data.data.program.title;
+    const programContent = data.data.program.content;
+    const overview = data.data.program.programfields?.overview;
+    const featuredImage = data.data.program.featuredImage?.node;
     const pId = data.data.program.id;
     const otherPrograms = data.data.programs.edges.filter(
       (program: ProgramSummaryEdge) => program.node.id !== pId,
@@ -88,9 +91,17 @@ const page = async ({ params }: { params: Promise<{ programId: string }> }) => {
           />
         }
       />
-      <ProgramTop/>
-      <ProgramOverview/>
-      <OtherPrograms/>
+      <ProgramTop title={breadcrumb} content={programContent} />
+      <ProgramOverview
+        content={overview}
+        image={{
+          src: featuredImage?.sourceUrl,
+          alt: featuredImage?.altText,
+          width: featuredImage?.mediaDetails?.width,
+          height: featuredImage?.mediaDetails?.height,
+        }}
+      />
+      <OtherPrograms programs={otherPrograms} />
     </>
   );
 }
