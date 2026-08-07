@@ -188,6 +188,29 @@ export type ProgramNode = {
   } | null
 }
 
+export type ProgramSummaryNode = {
+  id: string
+  title?: string | null
+  slug?: string | null
+  content?: string | null
+  programfields?: {
+    icon?: {
+      node: {
+        altText?: string | null
+        mediaDetails?: {
+          width?: number | null
+          height?: number | null
+        } | null
+        mediaItemUrl?: string | null
+      } | null
+    } | null
+  } | null
+}
+
+export type ProgramSummaryEdge = {
+  node: ProgramSummaryNode
+}
+
 export type HomePageHeading = {
   title?: string | null
   subtitle?: string | null
