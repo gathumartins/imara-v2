@@ -19,7 +19,7 @@ export function OtherArticlesSection({otherPosts}: {otherPosts: PostEdge[]}) {
             return (
               <li key={post.node.id} className="py-4 first:pt-0">
                 <Link
-                  href={`/blog/${post.node.slug}`}
+                  href={`/ipolicy/${post.node.slug}`}
                   className="group flex gap-3"
                 >
                   <span
@@ -46,7 +46,7 @@ export function OtherArticlesSection({otherPosts}: {otherPosts: PostEdge[]}) {
         </ul>
 
         <Link
-          href="/blog"
+          href="/ipolicy"
           className="mt-4 inline-flex items-center gap-2 text-ui-medium text-blue-700 hover:underline"
         >
           <Scale className="size-4" />
