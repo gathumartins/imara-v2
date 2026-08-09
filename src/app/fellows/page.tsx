@@ -28,6 +28,14 @@ export default async function FellowsPage() {
         description
         slug
         id
+        fellows {
+          edges {
+            node {
+              id
+              slug
+            }
+          }
+        }
         fellowCohort {
           cohortImage {
             node {
@@ -65,7 +73,7 @@ export default async function FellowsPage() {
         }
       />
 
-      <CohortsSection />
+      <CohortsSection cohorts={cohorts} />
 
       <RegisterCta />
     </>
