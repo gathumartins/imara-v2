@@ -103,7 +103,7 @@ export function LatestArticlesSection({ posts }: { posts: PostEdge[] }) {
                   </h4>
                   <div className="text-body-s text-gray-600 line-clamp-3" dangerouslySetInnerHTML={{ __html: post.node.content }} />
                   <Link
-                    href={`/iPolicy/${post.node.slug}`}
+                    href={`/ipolicy/${post.node.slug}`}
                     className="mt-auto w-fit text-ui-medium text-blue-700 underline underline-offset-4 hover:text-navy-900"
                   >
                     Read More

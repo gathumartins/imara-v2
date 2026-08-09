@@ -119,7 +119,7 @@ const authorInitial = displayAuthor?.name?.charAt(0)?.toUpperCase() || "A";
   return (
     <>
       <PageHero
-        breadcrumbs={[{ label: "iPolicy", href: "/iPolicy" }]}
+        breadcrumbs={[{ label: "iPolicy", href: "/ipolicy" }]}
         align="center"
         className="pb-48 md:pb-56"
         title={data.data.post.title}
