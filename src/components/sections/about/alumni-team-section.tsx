@@ -63,6 +63,7 @@ export function AlumniTeamSection({
                 >
                   {imageSrc ? (
                     <Image
+                    unoptimized
                       src={imageSrc}
                       alt={member.featuredImage?.node?.altText ?? name}
                       fill
