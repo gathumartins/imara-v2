@@ -28,7 +28,7 @@ export default async function FellowsPage() {
         description
         slug
         id
-        fellows {
+        fellows(first: 1000) {
           edges {
             node {
               id
