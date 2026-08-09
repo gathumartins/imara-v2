@@ -5,6 +5,10 @@ import type { ProgramNode } from "@/types/post"
 
 const PROGRAM_EMOJIS = ["🏕️", "💻", "🤝", "🎤"]
 
+function stripHtml(html: string) {
+  return html.replace(/<[^>]*>/g, "").trim()
+}
+
 export function ProgrammeComponentsSection({
   programs,
 }: {
@@ -43,10 +47,9 @@ export function ProgrammeComponentsSection({
                 {PROGRAM_EMOJIS[index % PROGRAM_EMOJIS.length]}
               </div>
               <h4 className="mt-6 text-ui-bold text-white">{item.title}</h4>
-              <div
-                className="mt-2 line-clamp-3 text-body-s text-blue-300"
-                dangerouslySetInnerHTML={{ __html: item.excerpt ?? item.content ?? "" }}
-              />
+              <p className="mt-2 line-clamp-3 text-body-s text-blue-300">
+                {stripHtml(item.excerpt ?? item.content ?? "")}
+              </p>
               <span className="mt-auto flex w-fit items-center gap-1 pt-5 text-ui-medium text-gold-600">
                 Learn more
                 <ArrowRight className="size-4" />

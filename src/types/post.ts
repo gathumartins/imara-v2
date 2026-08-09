@@ -186,6 +186,27 @@ export type TeamNode = {
   } | null
 }
 
+export type CoreStatementNode = {
+  title?: string | null
+  content?: string | null
+  shortname?: string | null
+  icon?: {
+    node: {
+      altText?: string | null
+      mediaDetails?: {
+        width?: number | null
+        height?: number | null
+      } | null
+      sourceUrl?: string | null
+    } | null
+  } | null
+}
+
+export type CoreStatementsField = {
+  defaultvalue?: string | null
+  statements?: CoreStatementNode[] | null
+}
+
 export type ProgramNode = {
   title?: string | null
   slug?: string | null

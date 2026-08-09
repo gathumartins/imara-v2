@@ -1,90 +1,80 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import Image from "next/image"
 import { MissionShape } from "@/components/shared/mission-shape"
 import { Card, CardContent } from "@/components/ui/card"
-import { ShieldCheck, HeartHandshake, Lightbulb, Users, Compass, Eye, Award, Target } from "lucide-react"
+import { ShieldCheck, HeartHandshake, Lightbulb, Users, Award } from "lucide-react"
 
-const MISSION_PILLARS = [
-  { title: "Integrity", description: "Ethical leadership at every level of public service", color: "bg-alert" },
-  { title: "Social Empathy", description: "Deep understanding of community needs and aspirations", color: "bg-gold-700" },
-  { title: "Creativity", description: "Innovative thinking to solve complex policy challenges", color: "bg-navy-900" },
-  { title: "Public Participation", description: "Civic engagement as the foundation of governance", color: "bg-alert" },
+import type { CoreStatementsField, CoreStatementNode } from "@/types/post"
+
+const ICON_BOX_BG = ["bg-gold-100", "bg-blue-100"]
+
+const VALUE_ICONS = [ShieldCheck, HeartHandshake, Lightbulb, Users, Award]
+const VALUE_ICON_BG = [
+  "bg-blue-700 text-white",
+  "bg-gold-700 text-navy-900",
+  "bg-navy-900 text-white",
+  "bg-blue-500 text-white",
+  "bg-gold-600 text-white",
 ]
 
-const VISION_PILLARS = [
-  {
-    title: "Responsive Leadership",
-    description: "Listening and reacting promptly to citizen needs across Kenya and Africa.",
-    icon: Compass,
-    color: "bg-blue-700 text-white",
-  },
-  {
-    title: "Participatory Governance",
-    description: "Inclusive decision-making where every voice contributes to sustainable policy.",
-    icon: Users,
-    color: "bg-gold-700 text-navy-900",
-  },
-  {
-    title: "Empathetic Public Service",
-    description: "Grounding public governance in deep understanding of community challenges.",
-    icon: HeartHandshake,
-    color: "bg-navy-900 text-white",
-  },
-  {
-    title: "Active Engagement",
-    description: "Fostering vibrant civic spaces for long-term betterment of society.",
-    icon: Lightbulb,
-    color: "bg-alert text-white",
-  },
-]
+function isValuesStatement(statement: CoreStatementNode) {
+  return (statement.shortname ?? statement.title ?? "").toLowerCase().includes("value")
+}
 
-const CORE_VALUES = [
-  {
-    title: "Integrity",
-    description: "Upholding honesty and moral principles in leadership.",
-    icon: ShieldCheck,
-    badgeBg: "bg-blue-100 text-blue-700 border-blue-300",
-    iconBg: "bg-blue-700 text-white",
-  },
-  {
-    title: "Social Empathy",
-    description: "Prioritizing understanding and addressing societal needs.",
-    icon: HeartHandshake,
-    badgeBg: "bg-gold-100 text-gold-700 border-gold-600",
-    iconBg: "bg-gold-700 text-navy-900",
-  },
-  {
-    title: "Creativity",
-    description: "Encouraging innovative approaches to public service challenges.",
-    icon: Lightbulb,
-    badgeBg: "bg-navy-900 text-white border-navy-800",
-    iconBg: "bg-navy-900 text-white",
-  },
-  {
-    title: "Public Participation",
-    description: "Championing inclusive and collaborative governance.",
-    icon: Users,
-    badgeBg: "bg-blue-100 text-blue-700 border-blue-300",
-    iconBg: "bg-blue-500 text-white",
-  },
-  {
-    title: "Service",
-    description: "Emphasizing public service as a core duty and responsibility of leadership.",
-    icon: Award,
-    badgeBg: "bg-gold-100 text-gold-700 border-gold-600",
-    iconBg: "bg-gold-600 text-white",
-  },
-]
+function stripHtml(html: string) {
+  return html.replace(/<[^>]*>/g, "").trim()
+}
 
-const MISSION_TABS = [
-  { id: "mission", label: "Our Mission" },
-  { id: "vision", label: "Our Vision" },
-  { id: "values", label: "Core Values" },
-]
+function parseValueItems(html: string) {
+  const liMatches = [...html.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi)]
+  const rawItems = liMatches.length > 0
+    ? liMatches.map((m) => m[1])
+    : [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map((m) => m[1])
 
-export function MissionValuesSection() {
-  const [activeTab, setActiveTab] = useState<"mission" | "vision" | "values">("mission")
+  return rawItems
+    .map((raw) => {
+      const strongMatch = raw.match(/<(strong|b)[^>]*>([\s\S]*?)<\/\1>/i)
+      if (strongMatch) {
+        const title = stripHtml(strongMatch[2])
+        const description = stripHtml(raw.replace(strongMatch[0], "")).replace(/^[:\-–—]\s*/, "")
+        return { title, description }
+      }
+      return { title: null, description: stripHtml(raw) }
+    })
+    .filter((item) => item.title || item.description)
+}
+
+export function MissionValuesSection({
+  coreStatements,
+}: {
+  coreStatements?: CoreStatementsField | null
+}) {
+  const allStatements = useMemo(
+    () => coreStatements?.statements?.filter((s): s is CoreStatementNode => Boolean(s)) ?? [],
+    [coreStatements],
+  )
+
+  const valuesStatement = allStatements.find(isValuesStatement)
+  const tabs = allStatements.filter((s) => s !== valuesStatement)
+
+  const getTabId = (statement: CoreStatementNode, index: number) => statement.shortname ?? `statement-${index}`
+
+  const defaultMatch = tabs.find((s) => s.shortname?.toLowerCase() === coreStatements?.defaultvalue?.toLowerCase())
+  const defaultTabId = tabs.length
+    ? defaultMatch
+      ? getTabId(defaultMatch, tabs.indexOf(defaultMatch))
+      : getTabId(tabs[0], 0)
+    : undefined
+
+  const [activeTab, setActiveTab] = useState(defaultTabId)
+
+  if (tabs.length === 0) return null
+
+  const activeStatement = tabs.find((s, index) => getTabId(s, index) === activeTab) ?? tabs[0]
+  const activeIndex = tabs.indexOf(activeStatement)
+  const activeIcon = activeStatement.icon?.node
 
   return (
     <section className="relative overflow-hidden bg-gold-100 py-20 md:py-24">
@@ -106,135 +96,79 @@ export function MissionValuesSection() {
 
         {/* Interactive Tabs */}
         <div className="mx-auto mb-10 flex w-fit rounded-[10px] bg-white p-[5px] ring-1 ring-gray-200 shadow-sm">
-          {MISSION_TABS.map((tab) => {
-            const isActive = activeTab === tab.id
+          {tabs.map((statement, index) => {
+            const tabId = getTabId(statement, index)
+            const isActive = activeTab === tabId
             return (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as "mission" | "vision" | "values")}
+                key={tabId}
+                onClick={() => setActiveTab(tabId)}
                 className={
                   isActive
                     ? "block rounded-[7px] bg-gold-700 px-8 py-2 text-ui-medium font-semibold text-blue-700 shadow-sm transition-all"
                     : "block rounded-[7px] px-8 py-2 text-ui-medium text-gray-500 hover:text-navy-900 hover:bg-gray-100 transition-colors"
                 }
               >
-                {tab.label}
+                {statement.shortname ?? statement.title}
               </button>
             )
           })}
         </div>
 
-        {/* Tab 1: Our Mission */}
-        {activeTab === "mission" && (
-          <Card className="rounded-[16px] border-0 shadow-sm ring-1 ring-gray-200 bg-white [--card-spacing:2rem] md:[--card-spacing:3rem] transition-all animate-fadeIn">
-            <CardContent className="grid grid-cols-1 gap-12 md:grid-cols-[1.1fr_1fr]">
-              <div className="flex flex-col justify-center">
-                <div className="mb-8 flex size-14 items-center justify-center rounded-[14px] bg-gold-100 text-gold-700">
-                  <Target className="size-8 text-blue-700" />
+        <Card
+          key={activeTab}
+          className="rounded-[16px] border-0 shadow-sm ring-1 ring-gray-200 bg-white [--card-spacing:2rem] md:[--card-spacing:3rem] transition-all animate-fadeIn"
+        >
+          <CardContent className="grid grid-cols-1 gap-12 md:grid-cols-[1.1fr_1fr]">
+            <div className="flex flex-col justify-center">
+              <div className="mb-8 flex items-center gap-4">
+                <div
+                  className={`flex size-14 shrink-0 items-center justify-center rounded-[14px] ${ICON_BOX_BG[activeIndex % ICON_BOX_BG.length]}`}
+                >
+                  {activeIcon?.sourceUrl && (
+                    <Image
+                      unoptimized
+                      src={activeIcon.sourceUrl}
+                      alt={activeIcon.altText ?? activeStatement.title ?? ""}
+                      width={activeIcon.mediaDetails?.width ?? 32}
+                      height={activeIcon.mediaDetails?.height ?? 32}
+                      className="size-8 object-contain"
+                    />
+                  )}
                 </div>
-                <h3 className="text-h3 text-navy-900">
-                  To develop African leaders who{" "}
-                  <span className="text-blue-700">transform</span>{" "}
-                  Kenya&apos;s public sector
-                </h3>
-                <p className="mt-6 text-body text-gray-500 font-medium leading-relaxed">
-                  To develop African leaders who exemplify integrity, social empathy, creativity,
-                  and public participation — equipping them with the skills and capacity to serve
-                  in and transform Kenya&apos;s public sector through meaningful public service.
-                </p>
+                <h3 className="text-h3 text-navy-900">Imara Fellowship {activeStatement.title}</h3>
               </div>
+              <div
+                className="mt-6 text-body text-gray-500 font-medium leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: activeStatement.content ?? "" }}
+              />
+            </div>
+
+            {valuesStatement && (
               <div className="rounded-[12px] bg-gray-100 p-8 border border-gray-200/50">
-                <p className="mb-6 text-tag text-blue-700">Mission pillars</p>
+                <p className="mb-6 text-tag text-blue-700">{valuesStatement.title}</p>
                 <ul className="flex flex-col gap-6">
-                  {MISSION_PILLARS.map((pillar) => (
-                    <li key={pillar.title} className="flex gap-4">
-                      <span className={`mt-2 size-2 shrink-0 rounded-full ${pillar.color}`} />
-                      <div>
-                        <p className="text-body-s font-bold text-navy-900">{pillar.title}</p>
-                        <p className="text-body-s text-gray-400 font-medium mt-1">{pillar.description}</p>
-                      </div>
-                    </li>
-                  ))}
+                  {parseValueItems(valuesStatement.content ?? "").map((item, index) => {
+                    const Icon = VALUE_ICONS[index % VALUE_ICONS.length]
+                    return (
+                      <li key={item.title ?? index} className="flex gap-4">
+                        <div
+                          className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${VALUE_ICON_BG[index % VALUE_ICON_BG.length]}`}
+                        >
+                          <Icon className="size-4" />
+                        </div>
+                        <div>
+                          {item.title && <p className="text-body-s font-bold text-navy-900">{item.title}</p>}
+                          <p className="text-body-s text-gray-400 font-medium mt-1">{item.description}</p>
+                        </div>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Tab 2: Our Vision */}
-        {activeTab === "vision" && (
-          <Card className="rounded-[16px] border-0 shadow-sm ring-1 ring-gray-200 bg-white [--card-spacing:2rem] md:[--card-spacing:3rem] transition-all animate-fadeIn">
-            <CardContent className="grid grid-cols-1 gap-12 md:grid-cols-[1.1fr_1fr]">
-              <div className="flex flex-col justify-center">
-                <div className="mb-8 flex size-14 items-center justify-center rounded-[14px] bg-blue-100">
-                  <Eye className="size-8 text-blue-700" />
-                </div>
-                <h3 className="text-h3 text-navy-900">
-                  A responsive, participatory &amp;{" "}
-                  <span className="text-blue-700">empathetic</span> public leadership
-                </h3>
-                <p className="mt-6 text-body text-gray-500 font-medium leading-relaxed">
-                  A responsive, participatory, and empathetic public leadership in Kenya and Africa,
-                  fostering a culture of integrity, creativity, and active public engagement for the betterment of society.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {VISION_PILLARS.map((vPillar) => {
-                  const Icon = vPillar.icon
-                  return (
-                    <div
-                      key={vPillar.title}
-                      className="flex flex-col gap-3 rounded-[14px] bg-gray-100 p-5 border border-gray-200/60 hover:shadow-md transition-all"
-                    >
-                      <div className={`flex size-10 items-center justify-center rounded-xl ${vPillar.color}`}>
-                        <Icon className="size-5" />
-                      </div>
-                      <p className="text-body-s font-bold text-navy-900">{vPillar.title}</p>
-                      <p className="text-caption text-gray-500 leading-relaxed">{vPillar.description}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Tab 3: Core Values */}
-        {activeTab === "values" && (
-          <Card className="rounded-[16px] border-0 shadow-sm ring-1 ring-gray-200 bg-white [--card-spacing:2rem] md:[--card-spacing:3rem] transition-all animate-fadeIn">
-            <CardContent className="flex flex-col gap-8">
-              <div>
-                <span className="inline-block text-tag text-blue-700 mb-2">
-                  Our Guiding Principles
-                </span>
-                <h3 className="text-h3 text-navy-900">
-                  The values that shape every <span className="text-blue-700">Imara Fellow</span>
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {CORE_VALUES.map((val) => {
-                  const Icon = val.icon
-                  return (
-                    <div
-                      key={val.title}
-                      className="flex flex-col justify-between gap-4 rounded-[16px] bg-gray-100 p-6 border border-gray-200/70 hover:border-blue-300 hover:bg-white hover:shadow-md transition-all"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${val.iconBg}`}>
-                          <Icon className="size-5" />
-                        </div>
-                        <h4 className="text-ui-bold text-navy-900">{val.title}</h4>
-                      </div>
-                      <p className="text-body-s text-gray-500 font-medium leading-relaxed">{val.description}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+            )}
+          </CardContent>
+        </Card>
       </div>
     </section>
   )

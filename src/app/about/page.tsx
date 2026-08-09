@@ -124,6 +124,7 @@ export default async function AboutPage() {
   const homePrograms = data.data.programs.edges;
   const teams = data.data.teams.edges;
   const breadcrumb = data.data.page.title;
+  const coreStatements = data.data.page.aboutfields?.coreStatements;
 
   return (
     <>
@@ -135,7 +136,7 @@ export default async function AboutPage() {
       />
 
       <IntroSection />
-      <MissionValuesSection />
+      <MissionValuesSection coreStatements={coreStatements} />
       <ProgrammeComponentsSection programs={homePrograms} />
       <AlumniTeamSection teams={teams} />
 
