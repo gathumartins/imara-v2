@@ -66,7 +66,7 @@ export function FeaturedArticleSection({post}: {post?: PostEdge}) {
               />
             ) : null}
             <Link
-              href={`/blog/${post?.node.slug}`}
+              href={`/iPolicy/${post?.node.slug}`}
               className="w-fit text-ui-medium text-blue-700 underline underline-offset-4 hover:text-navy-900"
             >
               Read the full article
