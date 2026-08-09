@@ -217,6 +217,29 @@ export type CoreStatementsField = {
   statements?: CoreStatementNode[] | null
 }
 
+export type QandaNode = {
+  question?: string | null
+  answer?: string | null
+}
+
+export type FaqRow = {
+  qandas?: QandaNode | null
+}
+
+export type MapLocationField = {
+  center?: {
+    lat?: number | null
+    lng?: number | null
+  } | null
+  height?: number | null
+  zoom?: number | null
+}
+
+export type ContactField = {
+  email?: string | null
+  phone?: string | null
+}
+
 export type ProgramNode = {
   title?: string | null
   slug?: string | null

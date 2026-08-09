@@ -1,52 +1,106 @@
-import { Mail, MapPin, Phone, Plus } from "lucide-react"
+"use client"
+
+import { useState, type SubmitEvent } from "react"
+import { CheckCircle2, Mail, MapPin, Phone, Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
-const FAQS = [
-  {
-    question: "Who should apply for the programme?",
-    answer:
-      "Mid-career professionals, civil servants, and civil-society leaders across Africa who are actively shaping governance and public policy in their communities.",
-  },
-  {
-    question: "What are the key outputs of the fellowship?",
-    answer:
-      "Fellows complete four programme components — the Residential Academy, Online Learning, Community Collaboration, and Public Lectures & Leadership Cafes. Each produces tangible outputs: a policy paper, a community engagement report, and a certified credential from a global university partner.",
-  },
-  {
-    question: "Is the fellowship fully funded?",
-    answer:
-      "Yes. Tuition, residency costs, and learning materials are fully covered for admitted fellows through Imara Fellowship's partner network.",
-  },
-  {
-    question: "How do I register or apply?",
-    answer:
-      "Applications open ahead of each cohort intake. Head to the Apply page to review eligibility criteria and submit your application online.",
-  },
-]
+import type { ContactField, FaqRow } from "@/types/post"
 
-const CONTACT_DETAILS = [
-  {
-    icon: Mail,
-    label: "General",
-    value: "info@imarafellowship.org",
-    href: "mailto:info@imarafellowship.org",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+254 700 000 000",
-    href: "tel:+254700000000",
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: "4th Floor, Middle East Bank Towers, Westlands",
-    href: undefined,
-  },
-]
+const CF7_FORM_ID = "395"
+const CF7_UNIT_TAG = "wpcf7-f395-p1-o1"
+const CF7_ENDPOINT = `https://www.admin.imarafellowship.org/wp-json/contact-form-7/v1/contact-forms/${CF7_FORM_ID}/feedback`
 
-export function FaqContactSection() {
+export function FaqContactSection({
+  faq,
+  address,
+  contact,
+}: {
+  faq?: FaqRow[] | null
+  address?: string | null
+  contact?: ContactField | null
+}) {
+  const faqs = faq?.map((row) => row.qandas).filter((qanda) => Boolean(qanda?.question)) ?? []
+
+  const contactDetails = [
+    contact?.email && {
+      icon: Mail,
+      label: "Email",
+      value: contact.email,
+      href: `mailto:${contact.email}`,
+    },
+    contact?.phone && {
+      icon: Phone,
+      label: "Phone",
+      value: contact.phone,
+      href: `tel:${contact.phone.replace(/\s+/g, "")}`,
+    },
+    address && {
+      icon: MapPin,
+      label: "Location",
+      value: address,
+      href: undefined,
+    },
+  ].filter(Boolean) as { icon: typeof Mail; label: string; value: string; href?: string }[]
+
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(1)
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+  const [subject, setSubject] = useState("")
+  const [message, setMessage] = useState("")
+  const [submitting, setSubmitting] = useState(false)
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [resMessage, setResMessage] = useState("")
+
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setSubmitting(true)
+
+    const formData = new FormData(event.currentTarget)
+    formData.append("_wpcf7", CF7_FORM_ID)
+    formData.append("_wpcf7_unit_tag", CF7_UNIT_TAG)
+
+    try {
+      const req = await fetch(CF7_ENDPOINT, {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!req.ok) {
+        throw new Error(`HTTP error! status: ${req.status}`)
+      }
+
+      const response = await req.json()
+      setResMessage(response.message)
+
+      if (response.status === "mail_sent") {
+        setSuccess(true)
+        setShowSuccessMessage(true)
+        setTimeout(() => {
+          setShowSuccessMessage(false)
+          setName("")
+          setEmail("")
+          setPhone("")
+          setSubject("")
+          setMessage("")
+        }, 5000)
+      } else {
+        setSuccess(false)
+        setResMessage(response.message || "Failed to send message. Please try again.")
+        if (response.invalid_fields?.length) {
+          console.error("CF7 invalid fields:", response.invalid_fields)
+        }
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error)
+      setSuccess(false)
+      setResMessage("An error occurred while sending your message. Please try again.")
+    } finally {
+      setSubmitting(false)
+    }
+  }
   return (
     <section className="border-t border-gray-200 bg-white py-20 md:py-24">
       <div className="container-page grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-12">
@@ -60,21 +114,30 @@ export function FaqContactSection() {
           </p>
 
           <div className="flex flex-col">
-            {FAQS.map((faq, index) => (
+            {faqs.map((qanda, index) => (
               <details
-                key={faq.question}
-                open={index === 1}
+                key={qanda?.question ?? index}
+                open={openFaqIndex === index}
                 className="group border-b border-gray-200"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left marker:content-none [&::-webkit-details-marker]:hidden">
+                <summary
+                  onClick={(event) => {
+                    event.preventDefault()
+                    setOpenFaqIndex((current) => (current === index ? null : index))
+                  }}
+                  className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left marker:content-none [&::-webkit-details-marker]:hidden"
+                >
                   <span className="text-ui-bold text-navy-900 group-open:text-blue-700">
-                    {faq.question}
+                    {qanda?.question}
                   </span>
                   <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-gray-100 text-gray-500 transition-transform group-open:rotate-45 group-open:bg-blue-700 group-open:text-white">
                     <Plus className="size-3.5" />
                   </span>
                 </summary>
-                <p className="pb-5 text-body-s text-gray-500">{faq.answer}</p>
+                <div
+                  className="pb-5 text-body-s text-gray-500 [&_p]:mb-2 last:[&_p]:mb-0"
+                  dangerouslySetInnerHTML={{ __html: qanda?.answer ?? "" }}
+                />
               </details>
             ))}
           </div>
@@ -90,7 +153,7 @@ export function FaqContactSection() {
           </p>
 
           <div className="mb-8 flex flex-col gap-5 rounded-md bg-navy-900 p-6 shadow-sm border border-navy-800">
-            {CONTACT_DETAILS.map(({ icon: Icon, label, value, href }) => (
+            {contactDetails.map(({ icon: Icon, label, value, href }) => (
               <div key={label} className="flex items-center gap-4">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-md bg-white/10 text-white">
                   <Icon className="size-4" />
@@ -109,7 +172,14 @@ export function FaqContactSection() {
             ))}
           </div>
 
-          <form className="flex flex-col gap-5">
+          {showSuccessMessage && (
+            <div className="mb-5 flex items-center gap-3 rounded-md border border-success/20 bg-success/10 px-4 py-4 text-body-s text-success">
+              <CheckCircle2 className="size-5 shrink-0" />
+              {resMessage || "Thanks for reaching out — we'll get back to you shortly."}
+            </div>
+          )}
+
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div className="flex flex-col gap-2">
                 <label htmlFor="name" className="text-ui-medium text-navy-900">
@@ -117,9 +187,11 @@ export function FaqContactSection() {
                 </label>
                 <input
                   id="name"
-                  name="name"
+                  name="your-name"
                   type="text"
                   required
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
                   placeholder="Your full name"
                   className="h-12 rounded-md border border-gray-200 px-4 text-body-s text-navy-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-500/20 focus:outline-none"
                 />
@@ -130,9 +202,11 @@ export function FaqContactSection() {
                 </label>
                 <input
                   id="email"
-                  name="email"
+                  name="your-email"
                   type="email"
                   required
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                   placeholder="you@example.com"
                   className="h-12 rounded-md border border-gray-200 px-4 text-body-s text-navy-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-500/20 focus:outline-none"
                 />
@@ -145,9 +219,28 @@ export function FaqContactSection() {
               </label>
               <input
                 id="phone"
-                name="phone"
+                name="your-phone"
                 type="tel"
+                required
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
                 placeholder="+254 700 000 000"
+                className="h-12 rounded-md border border-gray-200 px-4 text-body-s text-navy-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-500/20 focus:outline-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="subject" className="text-ui-medium text-navy-900">
+                Subject
+              </label>
+              <input
+                id="subject"
+                name="your-subject"
+                type="text"
+                required
+                value={subject}
+                onChange={(event) => setSubject(event.target.value)}
+                placeholder="What's this about?"
                 className="h-12 rounded-md border border-gray-200 px-4 text-body-s text-navy-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-500/20 focus:outline-none"
               />
             </div>
@@ -158,16 +251,22 @@ export function FaqContactSection() {
               </label>
               <textarea
                 id="message"
-                name="message"
+                name="your-message"
                 required
                 rows={5}
+                value={message}
+                onChange={(event) => setMessage(event.target.value)}
                 placeholder="How can we help you?"
                 className="resize-none rounded-md border border-gray-200 px-4 py-3 text-body-s text-navy-900 placeholder:text-gray-400 focus:border-blue-500 focus:ring-3 focus:ring-blue-500/20 focus:outline-none"
               />
             </div>
 
-            <Button type="submit" size="lg" className="w-full rounded-md">
-              Send Message
+            {!success && resMessage && (
+              <p className="text-caption text-alert">{resMessage}</p>
+            )}
+
+            <Button type="submit" size="lg" className="w-full rounded-md" disabled={submitting}>
+              {submitting ? "Sending..." : "Send Message"}
             </Button>
           </form>
         </div>

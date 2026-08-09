@@ -22,6 +22,10 @@ export default async function ContactsPage() {
     }
     contactUs {
       address
+      contact {
+        email
+        phone
+      }
       mapLocation {
         center {
           lat
@@ -49,6 +53,9 @@ export default async function ContactsPage() {
      const mini = data.data.page.pageBanners;
      const breadcrumb = data.data.page.title;
      const location = data.data.page.contactUs.mapLocation;
+     const faq = data.data.page.contactUs.faq;
+     const address = data.data.page.contactUs.address;
+     const contact = data.data.page.contactUs.contact;
   return (
     <>
       <PageHero
@@ -61,8 +68,8 @@ export default async function ContactsPage() {
         }
       />
 
-      <MapSection />
-      <FaqContactSection />
+      <MapSection location={location} address={address} />
+      <FaqContactSection faq={faq} address={address} contact={contact} />
 
       <RegisterCta />
     </>
