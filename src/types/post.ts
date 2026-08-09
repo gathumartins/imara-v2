@@ -293,6 +293,55 @@ export type HomePageHeadingGroup = {
   testimonials?: HomePageHeading | null
 }
 
+export type ImpactMedia = {
+  node?: {
+    altText?: string | null
+    mediaItemUrl?: string | null
+    mediaDetails?: {
+      width?: number | null
+      height?: number | null
+    } | null
+  } | null
+}
+
+export type ImpactHighlight = {
+  description?: string | null
+  media?: ImpactMedia | null
+}
+
+export type ImpactSubgroup = {
+  title?: string | null
+  description?: string | null
+  shortname?: string | null
+}
+
+export type ImpactCapacityField = {
+  title?: string | null
+  description?: string | null
+  subgroups?: {
+    list?: ImpactSubgroup[] | null
+  } | null
+  defaultValue?: string | null
+}
+
+export type ImpactPartnershipField = {
+  title?: string | null
+  description?: string | null
+  highlight?: ImpactHighlight | null
+}
+
+export type ImpactPolicyField = {
+  title?: string | null
+  description?: string | null
+  highlight?: ImpactHighlight | null
+}
+
+export type ImpactFields = {
+  capacity?: ImpactCapacityField | null
+  partnership?: ImpactPartnershipField | null
+  policy?: ImpactPolicyField | null
+}
+
 export type HomePageData = {
   page?: {
     id?: string | null

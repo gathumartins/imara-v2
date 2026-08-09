@@ -72,6 +72,17 @@ page: page(id: "cG9zdDoxOA==") {
       }
     }
   }
+  testimonials: testimonials(first: 2) {
+    edges {
+      node {
+        title
+        content
+        testimonialFields {
+          cohort
+        }
+      }
+    }
+  }
 }
   `;
 
@@ -81,8 +92,9 @@ page: page(id: "cG9zdDoxOA==") {
       );
       const data = await result.json();
       const mini = data.data.page.pageBanners;
-      const cats = data.data.page.impactfields.capacity.subgroups;
+      const impactfields = data.data.page.impactfields;
       const breadcrumb = data.data.page.title;
+      const testimonials = data.data.testimonials.edges;
   return (
     <>
       <PageHero
@@ -93,9 +105,9 @@ page: page(id: "cG9zdDoxOA==") {
       />
 
       <InPageNavSection />
-      <CapacityBuildingSection />
-      <PartnershipSection />
-      <PolicyRecommendationsSection />
+      <CapacityBuildingSection capacity={impactfields.capacity} testimonials={testimonials} />
+      <PartnershipSection partnership={impactfields.partnership} />
+      <PolicyRecommendationsSection policy={impactfields.policy} />
 
       <RegisterCta />
     </>

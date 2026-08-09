@@ -29,32 +29,34 @@ export function HeroSlider({
     .map((_, i) => {
       const start = (i / n) * 100
       const end = ((i + 1) / n) * 100
-      const fadeInEnd = Math.min(start + fade, end)
+      const fadeInStart = Math.max(start - fade, 0)
       const fadeOutStart = Math.max(end - fade, start)
       const fadeKeyframe =
         i === 0
           ? `
 @keyframes hero-fade-${i} {
-  0% { opacity: 1; transform: scale(1); }
+  0% { opacity: 1; transform: scale(1.02); }
   ${fadeOutStart}% { opacity: 1; transform: scale(1.06); }
-  ${end}%, 100% { opacity: 0; transform: scale(1.08); }
+  ${end}% { opacity: 0; transform: scale(1.08); }
+  ${100 - fade}% { opacity: 0; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.02); }
 }`
           : `
 @keyframes hero-fade-${i} {
-  0%, ${start}% { opacity: 0; transform: scale(1); }
-  ${fadeInEnd}% { opacity: 1; transform: scale(1.02); }
+  0%, ${fadeInStart}% { opacity: 0; transform: scale(1); }
+  ${start}% { opacity: 1; transform: scale(1.02); }
   ${fadeOutStart}% { opacity: 1; transform: scale(1.06); }
   ${end}%, 100% { opacity: 0; transform: scale(1.08); }
 }`
       return `
 ${fadeKeyframe}
 @keyframes hero-dot-${i} {
-  0%, ${start}% { width: 6px; background-color: color-mix(in oklch, var(--imara-white) 50%, transparent); }
-  ${fadeInEnd}% { width: 32px; background-color: var(--imara-gold-600); }
+  0%, ${fadeInStart}% { width: 6px; background-color: color-mix(in oklch, var(--imara-white) 50%, transparent); }
+  ${start}% { width: 32px; background-color: var(--imara-gold-600); }
   ${fadeOutStart}% { width: 32px; background-color: var(--imara-gold-600); }
   ${end}%, 100% { width: 6px; background-color: color-mix(in oklch, var(--imara-white) 50%, transparent); }
 }
-.hero-slide-${i} { animation: hero-fade-${i} ${duration}s infinite ease-in-out; will-change: opacity, transform; }
+.hero-slide-${i} { animation: hero-fade-${i} ${duration}s infinite ease-in-out; will-change: opacity, transform; transition: opacity 700ms ease, transform 700ms ease; }
 .hero-dots label[for="hero-radio-${i}"] { animation: hero-dot-${i} ${duration}s infinite ease-in-out; }
 .hero-slider-root:hover .hero-slide-${i} { animation-play-state: paused; }
 .hero-slider-root:hover .hero-dots label[for="hero-radio-${i}"] { animation-play-state: paused; }
