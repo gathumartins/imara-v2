@@ -114,32 +114,42 @@ export function FaqContactSection({
           </p>
 
           <div className="flex flex-col">
-            {faqs.map((qanda, index) => (
-              <details
-                key={qanda?.question ?? index}
-                open={openFaqIndex === index}
-                className="group border-b border-gray-200"
-              >
-                <summary
-                  onClick={(event) => {
-                    event.preventDefault()
-                    setOpenFaqIndex((current) => (current === index ? null : index))
-                  }}
-                  className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-left marker:content-none [&::-webkit-details-marker]:hidden"
-                >
-                  <span className="text-ui-bold text-navy-900 group-open:text-blue-700">
-                    {qanda?.question}
-                  </span>
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-gray-100 text-gray-500 transition-transform group-open:rotate-45 group-open:bg-blue-700 group-open:text-white">
-                    <Plus className="size-3.5" />
-                  </span>
-                </summary>
-                <div
-                  className="pb-5 text-body-s text-gray-500 [&_p]:mb-2 last:[&_p]:mb-0"
-                  dangerouslySetInnerHTML={{ __html: qanda?.answer ?? "" }}
-                />
-              </details>
-            ))}
+            {faqs.map((qanda, index) => {
+              const isOpen = openFaqIndex === index
+              return (
+                <div key={qanda?.question ?? index} className="border-b border-gray-200">
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    onClick={() => setOpenFaqIndex((current) => (current === index ? null : index))}
+                    className="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left"
+                  >
+                    <span
+                      className={`text-ui-bold transition-colors duration-300 ${isOpen ? "text-blue-700" : "text-navy-900"}`}
+                    >
+                      {qanda?.question}
+                    </span>
+                    <span
+                      className={`flex size-6 shrink-0 items-center justify-center rounded-md transition-all duration-300 ${
+                        isOpen ? "rotate-45 bg-blue-700 text-white" : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      <Plus className="size-3.5" />
+                    </span>
+                  </button>
+                  <div
+                    className={`grid transition-all duration-300 ease-in-out ${
+                      isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div
+                      className="overflow-hidden pb-5 text-body-s text-gray-500 [&_p]:mb-2 last:[&_p]:mb-0"
+                      dangerouslySetInnerHTML={{ __html: qanda?.answer ?? "" }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
 
