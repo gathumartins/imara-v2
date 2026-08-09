@@ -60,6 +60,7 @@ export default async function FellowsPage() {
       const data = await result.json();
       const mini = data.data.page.pageBanners;
       const breadcrumb = data.data.page.title;
+      const content = data.data.page.content;
       const cohorts = data.data.cohorts.edges;
   return (
     <>
@@ -73,7 +74,7 @@ export default async function FellowsPage() {
         }
       />
 
-      <CohortsSection cohorts={cohorts} />
+      <CohortsSection cohorts={cohorts} content={content} />
 
       <RegisterCta />
     </>

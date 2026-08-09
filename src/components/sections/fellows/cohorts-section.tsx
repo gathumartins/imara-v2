@@ -67,24 +67,23 @@ function CohortCard({
   )
 }
 
-export function CohortsSection({ cohorts }: { cohorts: CohortEdge[] }) {
+export function CohortsSection({
+  cohorts,
+  content,
+}: {
+  cohorts: CohortEdge[]
+  content: string
+}) {
   return (
     <section className="bg-white py-20 md:py-24">
       <div className="container-page flex flex-col gap-10">
         <div className="flex flex-col gap-4">
           <p className="text-tag text-gold-500">All Cohorts</p>
           <h2 className="text-h2 text-navy-900">Cohorts across the years</h2>
-          <p className="w-full text-body text-gray-500">
-            At the heart of the Imara Fellowship are our Fellows—dynamic, passionate young
-            leaders who are transforming communities, influencing policies, and driving
-            governance excellence across Kenya and beyond. Each of our fellows embodies the
-            spirit of leadership, equipped with the knowledge, skills, and networks gained
-            through intensive training, mentorship, and real-world policy engagement. From
-            advocating for social accountability in healthcare to championing climate justice
-            and youth inclusion, our fellows are at the forefront of creating meaningful,
-            lasting change. Explore their stories and witness the impact of transformative
-            leadership.
-          </p>
+          <div
+            className="w-full text-body text-gray-500"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
         </div>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {cohorts.map(({ node }, index) => (
