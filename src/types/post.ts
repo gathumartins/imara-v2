@@ -186,6 +186,16 @@ export type TeamNode = {
   } | null
 }
 
+export type ConvenerNode = {
+  name?: string | null
+  category?: string | null
+  description?: string | null
+}
+
+export type ConvenerEdge = {
+  convener?: ConvenerNode | null
+}
+
 export type CoreStatementNode = {
   title?: string | null
   content?: string | null

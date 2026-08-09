@@ -8,6 +8,19 @@ import { ProgrammeComponentsSection } from "@/components/sections/about/programm
 export default async function AboutPage() {
   const query = `
   {
+  home: page(id: "cG9zdDoxMA==") {
+    homehero {
+      homestats {
+        title
+        description
+        stats {
+          figures
+          title
+          suffix
+        }
+      }
+    }
+  }
   page: page(id: "cG9zdDoxMg==") {
     id
     title
@@ -34,6 +47,13 @@ export default async function AboutPage() {
       }
     }
     aboutfields {
+    conveners {
+        convener {
+          name
+          category
+          description
+        }
+      }
       coreStatements {
         defaultvalue
         statements {
@@ -125,6 +145,8 @@ export default async function AboutPage() {
   const teams = data.data.teams.edges;
   const breadcrumb = data.data.page.title;
   const coreStatements = data.data.page.aboutfields?.coreStatements;
+  const homeStats = data.data.home.homehero.homestats;
+  const conveners = data.data.page.aboutfields?.conveners;
 
   return (
     <>
@@ -135,7 +157,7 @@ export default async function AboutPage() {
         }
       />
 
-      <IntroSection />
+      <IntroSection content={data.data.page.content} conveners={conveners} stats={homeStats} />
       <MissionValuesSection coreStatements={coreStatements} />
       <ProgrammeComponentsSection programs={homePrograms} />
       <AlumniTeamSection teams={teams} />

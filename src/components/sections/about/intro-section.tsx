@@ -1,38 +1,43 @@
 import { StatCard } from "@/components/shared/stat-card"
+import type { ConvenerEdge, HomeStatsSection } from "@/types/post"
 
-const STATS = [
-  { value: "100+", label: "Fellows trained across Africa", sublabel: "" },
-  { value: "5+", label: "Major Policy Contributions", sublabel: "" },
+const BADGE_CLASSES = [
+  "bg-alert/10 text-alert", // alert tint
+  "bg-gold-100 text-gold-700", // gold tint
+  "bg-blue-100 text-blue-700", // blue tint
 ]
 
-const PARTNERS = [
-  {
-    number: "01",
-    name: "Siasa Place",
-    badge: "CSO",
-    badgeClass: "bg-alert/10 text-alert", // alert tint
-    description:
-      "CSO focused on advocacy through education and capacity building, with targeted programme implementation.",
-  },
-  {
-    number: "02",
-    name: "Africa Youth Leadership Forum",
-    badge: "Trust",
-    badgeClass: "bg-gold-100 text-gold-700", // gold tint
-    description:
-      "Leadership trust working across East Africa, developing skills and values amongst young leaders.",
-  },
-  {
-    number: "03",
-    name: "Mark Appeal Group",
-    badge: "Consultancy",
-    badgeClass: "bg-blue-100 text-blue-700", // blue tint
-    description:
-      "Social consultancy designing high-impact programmes through strategic alliances and creative collaboration.",
-  },
-]
+// The CMS content leads with its own <h3> title, which would duplicate the h2 above it.
+function stripLeadingHeading(html: string) {
+  return html.replace(/^\s*<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>\s*/i, "")
+}
 
-export function IntroSection() {
+export function IntroSection({
+  content,
+  conveners,
+  stats,
+}: {
+  content?: string | null
+  conveners?: ConvenerEdge[] | null
+  stats?: HomeStatsSection | null
+}) {
+  const partners =
+    conveners
+      ?.map((edge) => edge?.convener)
+      .filter((convener): convener is NonNullable<typeof convener> => Boolean(convener))
+      .map((convener) => ({
+        name: convener.name ?? "",
+        badge: convener.category ?? "",
+        description: convener.description ?? "",
+      })) ?? []
+
+  const cardStats =
+    stats?.stats?.map((stat) => ({
+      value: `${stat.figures ?? ""}${stat.suffix ?? ""}`,
+      label: stat.title ?? "",
+      sublabel: "",
+    })) ?? []
+
   return (
     <section className="bg-white py-20 md:py-24">
       <div className="container-page grid grid-cols-1 gap-16 lg:grid-cols-2">
@@ -41,15 +46,39 @@ export function IntroSection() {
           <h2 className="mt-3">
             A programme born from <span className="text-blue-700">collaboration</span>
           </h2>
-          <p className="mt-5 text-body text-gray-500">
-            Imara Africa is a leadership development programme collaboratively convened by
-            three pioneering institutions — bringing together advocacy, pan-African leadership
-            development, and high-impact programme design to cultivate the next generation of
-            Kenya&apos;s public servants.
-          </p>
-          <div className="my-8 h-px bg-gray-200" />
-          <div className="grid  grid-cols-2 gap-4">
-            {STATS.map((stat) => (
+          <div
+            className="mt-5 text-body text-gray-500 [&_h3]:mb-2 [&_h3]:mt-6 [&_h3]:text-ui-bold [&_h3]:text-navy-900 [&_h3]:first:mt-0 [&_h4]:mb-2 [&_h4]:mt-5 [&_h4]:text-ui-bold [&_h4]:text-navy-900 [&_ol]:list-inside [&_ol]:list-decimal [&_ol]:pl-3 [&_ol>li]:mb-2 [&_p]:mb-4 [&_p:last-child]:mb-0 [&_strong]:font-bold [&_strong]:text-navy-900 [&_ul]:list-inside [&_ul]:list-disc [&_ul]:pl-3 [&_ul>li]:mb-2"
+            dangerouslySetInnerHTML={{ __html: stripLeadingHeading(content ?? "") }}
+          />
+        </div>
+
+        <div className="flex flex-col gap-6">
+          {partners.map((partner, index) => (
+            <div
+              key={partner.name}
+              className="flex gap-4 border-b border-gray-200 pb-6 last:border-0"
+            >
+              <span className="text-caption text-gray-400 pt-1">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h4 className="text-ui-bold text-navy-900">
+                    {partner.name}
+                  </h4>
+                  <span
+                    className={`shrink-0 rounded-full px-3 py-1 text-tag ${BADGE_CLASSES[index % BADGE_CLASSES.length]}`}
+                  >
+                    {partner.badge}
+                  </span>
+                </div>
+                <p className="mt-2 text-body-s text-gray-400 leading-relaxed font-medium max-w-sm">{partner.description}</p>
+              </div>
+            </div>
+          ))}
+
+          <div className="grid grid-cols-2 gap-4">
+            {cardStats.map((stat) => (
               <StatCard
                 key={stat.label}
                 value={stat.value}
@@ -58,28 +87,6 @@ export function IntroSection() {
               />
             ))}
           </div>
-        </div>
-
-        <div className="flex flex-col gap-6">
-          {PARTNERS.map((partner) => (
-            <div
-              key={partner.name}
-              className="flex gap-4 border-b border-gray-200 pb-6 last:border-0"
-            >
-              <span className="text-caption text-gray-400 pt-1">{partner.number}</span>
-              <div className="flex-1">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h4 className="text-ui-bold text-navy-900">
-                    {partner.name}
-                  </h4>
-                  <span className={`shrink-0 rounded-full px-3 py-1 text-tag ${partner.badgeClass}`}>
-                    {partner.badge}
-                  </span>
-                </div>
-                <p className="mt-2 text-body-s text-gray-400 leading-relaxed font-medium max-w-sm">{partner.description}</p>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </section>
