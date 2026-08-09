@@ -147,7 +147,7 @@ export function CapacityBuildingSection({
                         <p className="text-ui-bold text-navy-900">{name}</p>
                       </div>
                       <div
-                        className="text-body-s text-gray-500 line-clamp-3 [&_p]:mb-0"
+                        className="text-body text-gray-500 line-clamp-3 [&_p]:mb-0"
                         dangerouslySetInnerHTML={{ __html: testimonial.content ?? "" }}
                       />
                       {cohort && (

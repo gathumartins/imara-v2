@@ -47,7 +47,7 @@ export function PartnershipSection({ partnership }: { partnership?: ImpactPartne
               captionSubtitle="Fellows and stakeholders in dialogue"
             />
             <div
-              className="flex flex-col justify-center gap-5 p-8 text-body-s text-gray-500 [&_p]:mb-0 md:p-10"
+              className="flex flex-col justify-center gap-5 p-8 text-body text-gray-500 [&_p]:mb-0 md:p-10"
               dangerouslySetInnerHTML={{
                 __html:
                   partnership?.highlight?.description ??

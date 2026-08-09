@@ -28,7 +28,7 @@ export function PolicyRecommendationsSection({ policy }: { policy?: ImpactPolicy
 
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
           <div
-            className="flex flex-col gap-5 text-body-s text-gray-500 [&_p]:mb-0"
+            className="flex flex-col gap-5 text-body text-gray-500 [&_p]:mb-0"
             dangerouslySetInnerHTML={{
               __html:
                 policy?.highlight?.description ??
