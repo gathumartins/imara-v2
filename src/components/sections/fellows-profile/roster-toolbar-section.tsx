@@ -1,15 +1,15 @@
 import Link from "next/link"
 
 import { cn } from "@/lib/utils"
-import type { Cohort } from "./types"
+import type { CohortListItem } from "./types"
 
 export function RosterToolbarSection({
   cohorts,
-  activeYear,
+  activeSlug,
   query,
 }: {
-  cohorts: Cohort[]
-  activeYear: string
+  cohorts: CohortListItem[]
+  activeSlug: string
   query: string
 }) {
   return (
@@ -17,12 +17,12 @@ export function RosterToolbarSection({
       <div className="container-page flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex w-fit flex-wrap gap-1 rounded-[10px] bg-gray-100 p-1.5">
           {cohorts.map((cohort) => {
-            const isActive = activeYear === cohort.year
+            const isActive = activeSlug === cohort.slug
 
             return (
               <Link
-                key={cohort.year}
-                href={`/fellows/profile?year=${cohort.year}`}
+                key={cohort.id}
+                href={`/fellows/profile?slug=${cohort.slug}`}
                 className={cn(
                   "rounded-[8px] px-6 py-2 text-body-s transition-all duration-200",
                   isActive
@@ -30,7 +30,7 @@ export function RosterToolbarSection({
                     : "text-gray-500 font-medium hover:text-navy-900 hover:bg-gray-100/50"
                 )}
               >
-                {cohort.year}
+                {cohort.name}
               </Link>
             )
           })}
@@ -40,7 +40,7 @@ export function RosterToolbarSection({
           method="get"
           className="flex h-[42px] w-full items-center rounded-[10px] border border-gray-200 bg-white px-5 sm:w-72 shadow-sm transition-colors focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500"
         >
-          <input type="hidden" name="year" value={activeYear} />
+          <input type="hidden" name="slug" value={activeSlug} />
           <input
             type="text"
             name="q"

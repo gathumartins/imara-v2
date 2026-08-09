@@ -57,7 +57,7 @@ function CohortCard({
         <p className="text-body-s font-medium text-gray-500">{fellowCount} Fellows</p>
 
         <Button variant="gold" size="md" className="mt-1" asChild>
-          <Link href={`/fellows/profile?year=${slug}`}>
+          <Link href={`/fellows/profile?slug=${slug}`}>
             View Cohort
             <ArrowRight className="size-4" />
           </Link>
